@@ -1,0 +1,121 @@
+<?php
+
+namespace Datatables\Manager;
+
+use Exception;
+use Datatables\Manager\Http\Request;
+
+/**
+ * AJAX handler class for common AJAX calls
+ */
+class Ajax
+{
+  /**
+   * @var string Prefix for AJAX actions for the plugin
+   */
+  protected $prefix = 'dtm';
+
+  /**
+   * @var TablesController
+   */
+  protected $tables_controller;
+
+  /**
+   * @var Request
+   */
+  protected $request;
+
+  public function __construct($tables_controller)
+  {
+    $this->tables_controller = $tables_controller;
+    $this->request = new Request();
+
+    set_exception_handler([$this, 'exceptionHandler']);
+
+    foreach ($this->getActions() as $action => $handler) {
+      $nopriv = isset($handler['nopriv']) ? $handler['nopriv'] : false;
+
+      if ($nopriv) {
+        add_action("wp_ajax_nopriv_{$this->prefix}_{$action}", $handler['function']);
+      }
+
+      add_action("wp_ajax_{$this->prefix}_{$action}", $handler['function']);
+    }
+  }
+
+  /**
+   * Handles exceptions that occur during AJAX calls
+   */
+  public function exceptionHandler(Exception $error): void
+  {
+    wp_send_json_error(['error' => $error->getMessage()], $error->getCode());
+  }
+
+  /**
+   * Gets the actions and handlers for AJAX calls
+   */
+  public function getActions(): array
+  {
+    return [
+      'get_all_tables' => ['function' => [$this, 'sendAllTables'], 'nopriv' => true],
+    ];
+  }
+
+  /**
+   * Checks the referer by validating nonce
+   * 
+   * @param string $referer
+   */
+  public function checkReferer(string $referer = 'datatables_admin_app'): void
+  {
+    if (!check_ajax_referer($referer, false, false)) {
+      wp_send_json_error(['error' => 'Nonce check failed'], 401);
+    }
+  }
+
+  /**
+   * Checks multiple referers, continues if one nonce is validated
+   * 
+   * @param array $referers An array of referer strings
+   */
+  public function checkRefererMultiple(array $referers = ['dtm-frontend-shortcode', 'datatables_admin_app']): void
+  {
+    $verified = false;
+
+    foreach ($referers as $referer) {
+      $verified = $verified || check_ajax_referer($referer, false, false);
+    }
+
+    if (!$verified) {
+      wp_send_json_error(['error' => 'Nonce check failed'], 401);
+    }
+  }
+
+  /**
+   * Sends all tables with JSON response
+   */
+  public function sendAllTables(): void
+  {
+    $this->checkRefererMultiple();
+
+    try {
+      $tables = $this->tables_controller->getAllTables();
+
+      wp_send_json_success($tables);
+    } catch (Exception $error) {
+      wp_send_json_error(['error' => $error->getMessage()], $error->getCode());
+    }
+  }
+
+  /**
+   * Handles the AJAX call for getting all contacts
+   */
+  public function handleGetAllContacts(): void
+  {
+    $this->checkReferer();
+
+    $contacts = $this->contacts_controller->getAllContacts();
+
+    wp_send_json_success(['contacts' => $contacts]);
+  }
+}

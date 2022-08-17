@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "wordpress-plugin-test",
+      "database": "wp_for_plugin",
+      "username": "wp",
+      "password": "1234"
+    }
+  ]
+}
