@@ -6,6 +6,14 @@ export const getAJAX = async (action, payload = {}) => {
   return await jQuery.get(datatablesMgrAdmin.ajax_url, payload);
 };
 
+export const postAJAX = async (action, payload = {}) => {
+  const prefix = "dtm";
+  payload.action = `${prefix}_${action}`;
+  payload._ajax_nonce = datatablesMgrAdmin.nonce;
+
+  return await jQuery.post(datatablesMgrAdmin.ajax_url, payload);
+};
+
 export const getSetting = async (option) => {
   const { data } = await postAJAX("get_setting", {
     option_name: option,

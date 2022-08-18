@@ -28,7 +28,7 @@ const getAllTables = async () => {
 
 getAllTables();
 
-const getLabels = (json) => {
+const getLabelsList = (json) => {
   let columns = JSON.parse(json);
   const labels = [];
 
@@ -36,7 +36,7 @@ const getLabels = (json) => {
     labels.push(columns[col].label);
   }
 
-  return labels;
+  return labels.join(", ");
 };
 
 const handleAddNewTable = () => {
@@ -92,7 +92,7 @@ const copyShortcode = async (id) => {
           />
           <el-table-column prop="columns" label="Colmuns" min-width="18">
             <template #default="{ row }">
-              {{ getLabels(row.columns).join(", ") }}
+              {{ getLabelsList(row.columns) }}
             </template>
           </el-table-column>
           <el-table-column label="Operations" min-width="13">

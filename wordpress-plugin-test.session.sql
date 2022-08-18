@@ -109,3 +109,8 @@ SELECT * FROM wp_datatables_tablerows;
 
 --@block
 SELECT * FROM wp_datatables_tablerows WHERE table_id = 1;
+
+--@block
+DELETE FROM `wp_datatables_tables` WHERE `id` = 2;
+DELETE FROM `wp_datatables_tables` WHERE `id` = 3;
+DELETE FROM `wp_datatables_tables` WHERE `id` = 4;

@@ -9,6 +9,11 @@ const router = createRouter({
       name: "All Tables",
       component: AllTablesView,
     },
+    {
+      path: "/add-new-table",
+      name: "Add New Table",
+      component: () => import("../views/AddNewTableView.vue"),
+    },
   ],
 });
 

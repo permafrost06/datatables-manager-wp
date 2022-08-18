@@ -58,6 +58,7 @@ class Ajax
   {
     return [
       'get_all_tables' => ['function' => [$this, 'sendAllTables'], 'nopriv' => true],
+      'add_table' => ['function' => [$this, 'addTable']]
     ];
   }
 
@@ -117,5 +118,17 @@ class Ajax
     $contacts = $this->contacts_controller->getAllContacts();
 
     wp_send_json_success(['contacts' => $contacts]);
+  }
+
+  public function addTable(): void
+  {
+    $this->checkReferer();
+
+    $table_name = $this->request->input("table_name");
+    $columns = $this->request->input("columns");
+
+    $this->tables_controller->addTable($table_name, $columns);
+
+    wp_send_json_success();
   }
 }

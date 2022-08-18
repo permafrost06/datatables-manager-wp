@@ -115,7 +115,19 @@ class TablesController
       throw new Exception("Could not get tables", 500);
     }
 
-    return $data;
+    return stripslashes_deep($data);
+  }
+
+  public function addTable($table_name, $columns): void
+  {
+    $response = $this->db->insert(
+      $this->meta_table,
+      array('table_name' => $table_name, 'columns' => $columns)
+    );
+
+    if (!$response) {
+      throw new Exception("Could not insert table", 500);
+    }
   }
 
   /**
