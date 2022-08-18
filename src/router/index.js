@@ -14,6 +14,12 @@ const router = createRouter({
       name: "Add New Table",
       component: () => import("../views/AddNewTableView.vue"),
     },
+    {
+      path: "/tables/:id",
+      name: "Single Table View",
+      component: () => import("../views/SingleTableView.vue"),
+      props: true,
+    },
   ],
 });
 

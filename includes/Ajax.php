@@ -58,7 +58,10 @@ class Ajax
   {
     return [
       'get_all_tables' => ['function' => [$this, 'sendAllTables'], 'nopriv' => true],
-      'add_table' => ['function' => [$this, 'addTable']]
+      'add_table' => ['function' => [$this, 'addTable']],
+      'get_table' => ['function' => [$this, 'sendTable']],
+      'get_table_rows' => ['function' => [$this, 'sendTableRows']],
+      'add_row' => ['function' => [$this, 'addRow']]
     ];
   }
 
@@ -128,6 +131,40 @@ class Ajax
     $columns = $this->request->input("columns");
 
     $this->tables_controller->addTable($table_name, $columns);
+
+    wp_send_json_success();
+  }
+
+  public function sendTable(): void
+  {
+    $this->checkReferer();
+
+    $table_id = $this->request->input("table_id");
+
+    $table = $this->tables_controller->getTable($table_id);
+
+    wp_send_json_success($table);
+  }
+
+  public function sendTableRows(): void
+  {
+    $this->checkReferer();
+
+    $table_id = $this->request->input("table_id");
+
+    $rows = $this->tables_controller->getTableRows($table_id);
+
+    wp_send_json_success($rows);
+  }
+
+  public function addRow(): void
+  {
+    $this->checkReferer();
+
+    $table_id = $this->request->input("table_id");
+    $row = $this->request->input("row");
+
+    $this->tables_controller->addRow($table_id, $row);
 
     wp_send_json_success();
   }

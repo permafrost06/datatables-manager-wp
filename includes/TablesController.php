@@ -130,6 +130,40 @@ class TablesController
     }
   }
 
+  public function getTable($table_id): object
+  {
+    $data = $this->db->get_row("SELECT * FROM {$this->meta_table} WHERE `id` = '$table_id'");
+
+    if (!$data) {
+      throw new Exception("Table with id '$table_id' does not exist", 404);
+    }
+
+    return stripslashes_deep($data);
+  }
+
+  public function getTableRows($table_id): array
+  {
+    $data = $this->db->get_results("SELECT row_id, row FROM {$this->data_table} WHERE `table_id` = '$table_id'");
+
+    if (is_null($data)) {
+      throw new Exception("Could not get rows", 500);
+    }
+
+    return stripslashes_deep($data);
+  }
+
+  public function addRow($table_id, $row): void
+  {
+    $response = $this->db->insert(
+      $this->data_table,
+      array('table_id' => $table_id, 'row' => $row)
+    );
+
+    if (!$response) {
+      throw new Exception("Could not insert row", 500);
+    }
+  }
+
   /**
    * Gets a page of contacts
    * 

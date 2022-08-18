@@ -85,11 +85,15 @@ const copyShortcode = async (id) => {
       <el-col>
         <el-table v-loading="loading" :data="tables" style="width: 100%">
           <el-table-column prop="id" label="id" width="40" />
-          <el-table-column
-            prop="table_name"
-            label="Table Name"
-            min-width="16"
-          />
+          <el-table-column prop="table_name" label="Table Name" min-width="16">
+            <template #default="{ row }">
+              <router-link
+                :to="{ name: 'Single Table View', params: { id: row.id } }"
+              >
+                {{ row.table_name }}
+              </router-link>
+            </template>
+          </el-table-column>
           <el-table-column prop="columns" label="Colmuns" min-width="18">
             <template #default="{ row }">
               {{ getLabelsList(row.columns) }}
