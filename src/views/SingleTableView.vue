@@ -22,7 +22,7 @@ const table_id = useRoute().params.id;
     console.log("AJAX Failed", e);
   }
 
-  columns.value = JSON.parse(table.value.columns);
+  columns.value = table.value.columns;
 })();
 
 const getRows = async () => {
@@ -30,12 +30,7 @@ const getRows = async () => {
     try {
       const { success, data } = await getAJAX("get_table_rows", { table_id });
       if (success) {
-        tableRows.value = data.map(({ row_id, row }) => {
-          return {
-            row_id,
-            ...JSON.parse(row),
-          };
-        });
+        tableRows.value = data;
       } else console.log("AJAX not successful", data);
     } catch (e) {
       console.log("AJAX Failed", e);

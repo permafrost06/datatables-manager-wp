@@ -28,8 +28,7 @@ const getAllTables = async () => {
 
 getAllTables();
 
-const getLabelsList = (json) => {
-  let columns = JSON.parse(json);
+const getLabelsList = (columns) => {
   const labels = [];
 
   for (let col in columns) {
