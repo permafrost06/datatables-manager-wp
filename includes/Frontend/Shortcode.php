@@ -2,13 +2,19 @@
 
 namespace Datatables\Manager\Frontend;
 
+use Datatables\Manager\TablesController;
+
 /**
  * Shortcode handler class
  */
 class Shortcode
 {
-  public function __construct()
+  protected $tables_controller;
+
+  public function __construct(TablesController $tables_controller)
   {
+    $this->tables_controller = $tables_controller;
+
     add_shortcode('custom-datatable', [$this, 'renderCustomDatatable']);
   }
 
@@ -28,12 +34,27 @@ class Shortcode
   /**
    * Shortcode handler function for shortcode 'contact-form'
    */
-  public function renderCustomDatatable(): string
+  public function renderCustomDatatable($atts): string
   {
+    $atts = array_change_key_case((array) $atts, CASE_LOWER);
+
     wp_enqueue_style('datatables-style');
     wp_enqueue_script('datatables');
     wp_enqueue_script('custom-datatable');
 
-    return $this->loadFile('test-table.php');
+    if (array_key_exists('id', $atts)) {
+      $id = $atts['id'];
+    } else {
+      $id = 1;
+    }
+
+    $columns = $this->tables_controller->getTableColumns($id);
+
+    $data = [
+      'table_id' => $id,
+      'columns' => $columns,
+    ];
+
+    return $this->loadFile('table-view.php', $data);
   }
 }

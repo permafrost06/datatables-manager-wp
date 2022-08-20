@@ -81,7 +81,7 @@ final class DatatablesManager
     elseif (is_admin())
       new Datatables\Manager\Admin();
     else
-      new \Datatables\Manager\Frontend();
+      new \Datatables\Manager\Frontend($tables_controller);
   }
 
   public function activate(): void

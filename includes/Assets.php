@@ -84,14 +84,14 @@ class Assets
       wp_register_style($handle, $style['src'], $deps, $style['version']);
     }
 
-    // wp_localize_script(
-    //   'cm-settings-ajax',
-    //   'contacts_manager_ajax',
-    //   [
-    //     'ajax_url' => admin_url('admin-ajax.php'),
-    //     'nonce' => wp_create_nonce('cm-frontend-shortcode')
-    //   ]
-    // );
+    wp_localize_script(
+      'custom-datatable',
+      'customDatatableAjax',
+      [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('dtm-frontend-shortcode')
+      ]
+    );
   }
 
   /**

@@ -130,6 +130,17 @@ class TablesController
     return $results;
   }
 
+  public function getTableRowsCount($table_id)
+  {
+    $count = (int) $this->db->get_var("SELECT COUNT(*) FROM {$this->data_table} WHERE `table_id` = '$table_id'");
+
+    if (is_null($count)) {
+      throw new Exception("Could not get rows count", 500);
+    }
+
+    return $count;
+  }
+
   public function addRow($table_id, $row): void
   {
     $response = $this->db->insert(
@@ -140,6 +151,26 @@ class TablesController
     if (!$response) {
       throw new Exception("Could not insert row", 500);
     }
+  }
+
+  public function getDataTableRows($table_id, $start, $length)
+  {
+    $results = $this->db->get_results(
+      "SELECT row_id, row FROM {$this->data_table} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
+      ARRAY_A
+    );
+
+    if (is_null($results)) {
+      throw new Exception("Could not get results", 500);
+    }
+
+    foreach ($results as &$result) {
+      $row_id = $result['row_id'];
+      $result = json_decode(stripslashes($result['row']), true);
+      $result['row_id'] = $row_id;
+    }
+
+    return $results;
   }
 
   /* debug-start */

@@ -61,7 +61,8 @@ class Ajax
       'add_table' => ['function' => [$this, 'addTable']],
       'get_table' => ['function' => [$this, 'sendTable']],
       'get_table_rows' => ['function' => [$this, 'sendTableRows']],
-      'add_row' => ['function' => [$this, 'addRow']]
+      'add_row' => ['function' => [$this, 'addRow']],
+      'get_datatable_rows' => ['function' => [$this, 'sendDatatableRows']],
     ];
   }
 
@@ -102,13 +103,9 @@ class Ajax
   {
     $this->checkRefererMultiple();
 
-    try {
-      $tables = $this->tables_controller->getAllTables();
+    $tables = $this->tables_controller->getAllTables();
 
-      wp_send_json_success($tables);
-    } catch (Exception $error) {
-      wp_send_json_error(['error' => $error->getMessage()], $error->getCode());
-    }
+    wp_send_json_success($tables);
   }
 
   /**
@@ -167,5 +164,26 @@ class Ajax
     $this->tables_controller->addRow($table_id, $row);
 
     wp_send_json_success();
+  }
+
+  public function sendDatatableRows(): void
+  {
+    $this->checkReferer('dtm-frontend-shortcode');
+
+    $table_id = $this->request->input('table_id');
+    $draw = $this->request->tryInput('draw', 0);
+    $start = $this->request->input('start');
+    $length = $this->request->input('length');
+
+    $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length);
+
+    $count = $this->tables_controller->getTableRowsCount($table_id);
+
+    wp_send_json([
+      'draw' => $draw,
+      'recordsTotal' => $count,
+      'recordsFiltered' => $count,
+      'data' => $rows
+    ]);
   }
 }

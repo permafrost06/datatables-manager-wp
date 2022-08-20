@@ -50,6 +50,15 @@ class Request
     return strtolower($this->input($name)) == 'true' ? true : false;
   }
 
+  public function tryInput($name, $default_value, $sanitized = true, $textarea = false)
+  {
+    try {
+      return $this->input($name, $sanitized, $textarea);
+    } catch (Exception $e) {
+      return $default_value;
+    }
+  }
+
   /**
    * Returns an array with fields specified by the arguments
    * 

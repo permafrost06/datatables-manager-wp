@@ -63,9 +63,9 @@ INSERT INTO wp_datatables_tablerows (table_id, row)
 VALUES (
   1,
   "{
-    'model': 'McLaren F1 GTR',
-    'manufacturer': 'McLaren',
-    'engine_type': 'BMW V12'
+    \"model\": \"McLaren F1 GTR\",
+    \"manufacturer\": \"McLaren\",
+    \"engine_type\": \"BMW V12\"
   }"
 );
 
@@ -73,9 +73,9 @@ INSERT INTO wp_datatables_tablerows (table_id, row)
 VALUES (
   1,
   "{
-    'model': 'Ferrari F50',
-    'manufacturer': 'Ferrari',
-    'engine_type': 'Tipo V12'
+    \"model\": \"Ferrari F50\",
+    \"manufacturer\": \"Ferrari\",
+    \"engine_type\": \"Tipo V12\"
   }"
 );
 
@@ -83,9 +83,9 @@ INSERT INTO wp_datatables_tablerows (table_id, row)
 VALUES (
   1,
   "{
-    'model': 'Ford GT40',
-    'manufacturer': 'Ford',
-    'engine_type': 'Ford V8'
+    \"model\": \"Ford GT40\",
+    \"manufacturer\": \"Ford\",
+    \"engine_type\": \"Ford V8\"
   }"
 );
 
@@ -93,9 +93,9 @@ INSERT INTO wp_datatables_tablerows (table_id, row)
 VALUES (
   1,
   "{
-    'model': 'Supra 2019',
-    'manufacturer': 'Toyota',
-    'engine_type': 'BMW V6'
+    \"model\": \"Supra 2019\",
+    \"manufacturer\": \"Toyota\",
+    \"engine_type\": \"BMW V6\"
   }"
 );
 
@@ -114,3 +114,12 @@ SELECT * FROM wp_datatables_tablerows WHERE table_id = 1;
 DELETE FROM `wp_datatables_tables` WHERE `id` = 2;
 DELETE FROM `wp_datatables_tables` WHERE `id` = 3;
 DELETE FROM `wp_datatables_tables` WHERE `id` = 4;
+
+--@block
+SELECT row_id, row FROM wp_datatables_tablerows WHERE `table_id` = 1;
+
+--@block
+DELETE FROM `wp_datatables_tablerows` WHERE `row_id` = 15;
+
+--@block
+SELECT COUNT(*) FROM `wp_datatables_tablerows` WHERE `table_id` = 3;

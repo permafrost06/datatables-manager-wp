@@ -7,8 +7,8 @@ namespace Datatables\Manager;
  */
 class Frontend
 {
-  public function __construct()
+  public function __construct($tables_controller)
   {
-    new Frontend\Shortcode();
+    new Frontend\Shortcode($tables_controller);
   }
 }
