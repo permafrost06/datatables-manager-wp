@@ -58,6 +58,7 @@ const formRules = reactive({
     :rules="formRules"
     :model="newTable"
     label-width="auto"
+    label-position="left"
     ref="formEl"
   >
     <el-form-item prop="table_name" label="Table Name">

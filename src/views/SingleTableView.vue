@@ -87,15 +87,17 @@ const handleAddNewRow = async () => {
       /> -->
     </el-row>
     <el-row v-if="showAddNew">
-      <el-form :inline="true" @submit.prevent="handleAddNewRow">
+      <el-form
+        @submit.prevent="handleAddNewRow"
+        label-width="auto"
+        label-position="left"
+      >
         <h3>Add new row</h3>
-        <el-form-item
-          v-for="column in columns"
-          :prop="column.value"
-          :label="column.label"
-        >
-          <el-input v-model="newRow[column.value]" />
-        </el-form-item>
+        <el-row v-for="column in columns" :key="column.value">
+          <el-form-item :prop="column.value" :label="column.label">
+            <el-input v-model="newRow[column.value]" />
+          </el-form-item>
+        </el-row>
         <el-form-item>
           <el-button native-type="submit" type="primary">Add row</el-button>
           <el-button @click="hideAddNewForm">Cancel</el-button>
