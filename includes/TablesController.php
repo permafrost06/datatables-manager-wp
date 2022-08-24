@@ -5,7 +5,7 @@ namespace Datatables\Manager;
 use Exception;
 
 /**
- * Contacts controller class
+ * Tables controller class
  */
 class TablesController
 {

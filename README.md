@@ -1,9 +1,9 @@
 # datatables-manager-wp
 
-A wordpress plugin to add and manage contacts.
+A wordpress plugin to add and manage custom datatables.
 
 The admin menu of the plugin is available at the "Settings" menu in the admin panel as "Datatables Manager".
-Here, the admin can see all the contacts in the plugin's database and can add, edit, or remove custom datatables as needed.
+Here, the admin can see all the tables in the plugin's database and can add, modify, or remove custom datatables as needed.
 
 Shortcode `custom-datatable` can be used to display a table.
 An argument `id` needs be passed with the ID of the desired table.

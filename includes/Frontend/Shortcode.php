@@ -32,7 +32,7 @@ class Shortcode
   }
 
   /**
-   * Shortcode handler function for shortcode 'contact-form'
+   * Shortcode handler function for shortcode 'custom-datatable'
    */
   public function renderCustomDatatable($atts): string
   {

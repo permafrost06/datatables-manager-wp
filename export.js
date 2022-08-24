@@ -15,7 +15,7 @@ const removed = content.replace(
 
 const change_version = removed.replace(
   /filemtime.+$/gm,
-  "CONTACTS_MANAGER_VERSION,"
+  "DATATABLES_MANAGER_VERSION,"
 );
 
 fs.writeFileSync(assetFile, change_version, "utf8");
@@ -49,6 +49,6 @@ archive.directory("assets");
 archive.directory("includes");
 archive.directory("vendor");
 
-archive.file("contacts-manager.php");
+archive.file("datatables-manager.php");
 
 archive.finalize();
