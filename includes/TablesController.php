@@ -228,6 +228,15 @@ class TablesController
     if ($response == 0) throw new Exception("Could not update table $table_id", 500);
   }
 
+  public function deleteRow($row_id)
+  {
+    $response = $this->db->delete($this->table_name, ['row_id' => $row_id]);
+
+    if (!$response) {
+      throw new Exception("Could not delete row with id $row_id", 404);
+    }
+  }
+
   /* debug-start */
   /**
    * Drops the plugin database table - debug only

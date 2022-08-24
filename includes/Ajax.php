@@ -65,6 +65,7 @@ class Ajax
       'get_datatable_rows' => ['function' => [$this, 'sendDatatableRows']],
       'delete_table' => ['function' => [$this, 'deleteTable']],
       'update_table' => ['function' => [$this, 'updateTable']],
+      'delete_row' => ['function' => [$this, 'deleteRow']],
       'delete_everything' => ['function' => [$this, 'deleteEverything']]
     ];
   }
@@ -211,6 +212,17 @@ class Ajax
     $table_desc = $this->request->input('table_desc', true, true);
 
     $this->tables_controller->updateTable($table_id, $table_name, $table_desc);
+
+    wp_send_json_success();
+  }
+
+  public function deleteRow(): void
+  {
+    $this->checkReferer();
+
+    $row_id = $this->request->input('row_id');
+
+    $this->tables_controller->deleteRow($row_id);
 
     wp_send_json_success();
   }

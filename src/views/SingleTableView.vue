@@ -13,6 +13,9 @@ const table = ref({});
 const columns = ref([]);
 const tableRows = ref([]);
 
+const deleteID = ref();
+const dialogVisible = ref(false);
+
 const formEl = ref();
 
 const newRow = ref({});
@@ -88,6 +91,28 @@ const rowPage = computed(() => {
     pageSize.value * currentPage.value
   );
 });
+
+const handleDelete = (id) => {
+  deleteID.value = id;
+  dialogVisible.value = true;
+};
+
+const confirmDelete = async () => {
+  try {
+    const { success, data } = await postAJAX("delete_row", {
+      row_id: deleteID.value,
+    });
+    if (success) {
+      successMessage("Successfully deleted row " + deleteID.value);
+      dialogVisible.value = false;
+      await getRows();
+    } else {
+      errorMessage("Could not delete row " + data.error);
+    }
+  } catch (e) {
+    errorMessage("AJAX failed - " + getXHRError(e));
+  }
+};
 </script>
 
 <template>
@@ -114,13 +139,24 @@ const rowPage = computed(() => {
     </el-row>
     <el-row>
       <el-col>
-        <el-table :data="rowPage" style="width: 100%">
+        <el-table :data="rowPage">
           <el-table-column prop="row_id" label="ID" />
           <el-table-column
             v-for="column in columns"
             :prop="column.value"
             :label="column.label"
           />
+          <el-table-column label="Operations" width="100">
+            <template #default="{ row }">
+              <el-button
+                size="small"
+                type="danger"
+                @click="handleDelete(row.row_id)"
+              >
+                Delete
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-col>
     </el-row>
@@ -129,6 +165,17 @@ const rowPage = computed(() => {
         Add new row
       </el-button>
     </el-row>
+
+    <el-dialog v-model="dialogVisible" title="Tips" width="30%">
+      <span> Are you sure you want to delete row with ID {{ deleteID }}? </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="danger" @click="confirmDelete"> Confirm </el-button>
+        </span>
+      </template>
+    </el-dialog>
+
     <el-dialog v-model="showAddNew" title="Add new row">
       <el-form
         @submit.prevent="handleAddNewRow"
