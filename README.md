@@ -1,15 +1,13 @@
-# contacts-manager-wp
+# datatables-manager-wp
 
 A wordpress plugin to add and manage contacts.
 
-The admin menu of the plugin is available at the "Settings" menu in the admin panel as "Contacts Manager".
-Here, the admin can see all the contacts in the plugin's database and can add, edit, or remove contacts as needed.
+The admin menu of the plugin is available at the "Settings" menu in the admin panel as "Datatables Manager".
+Here, the admin can see all the contacts in the plugin's database and can add, edit, or remove custom datatables as needed.
 
-Shortcode `contacts-manager` can be used to display the complete user table in a page.
-An argument `id` can be passed to display inidividual contact.
-Example: `[contacts-manager id="23"]` will display the contact with id "23".
-
-Shortcode `contact-form` can be used to create a form to add a new contact.
+Shortcode `custom-datatable` can be used to display a table.
+An argument `id` needs be passed with the ID of the desired table.
+Example: `[custom-datatable id="23"]` will display the table with id "23".
 
 ## Instrtuctions
 
