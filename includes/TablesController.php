@@ -190,6 +190,29 @@ class TablesController
     return $results;
   }
 
+  public function deleteTable($table_id)
+  {
+    $this->getTable($table_id);
+
+    $num_rows = $this->getTableRowsCount($table_id);
+
+    if ($num_rows) {
+      $response = $this->db->delete($this->table_name, array('table_id' => $table_id));
+
+      if ($response == false) {
+        throw new Exception("Could not delete table rows", 500);
+      }
+    }
+
+    delete_post_meta($table_id, '_database_table_columns');
+
+    $response = wp_delete_post($table_id, true);
+
+    if (is_null($response) || !$response) {
+      throw new Exception("Could not delete post", 500);
+    }
+  }
+
   /* debug-start */
   /**
    * Drops the plugin database table - debug only

@@ -3,7 +3,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/es/components/message/style/css";
-import { errorMessage, getAJAX, getXHRError } from "../composable";
+import {
+  errorMessage,
+  getAJAX,
+  getXHRError,
+  postAJAX,
+  successMessage,
+} from "../composable";
 import CopyIcon from "../components/CopyIconComponent.vue";
 
 const tables = ref([]);
@@ -49,6 +55,23 @@ const handleEdit = (id) => {
 const handleDelete = (id) => {
   deleteID.value = id;
   dialogVisible.value = true;
+};
+
+const confirmDelete = async () => {
+  try {
+    const { success, data } = await postAJAX("delete_table", {
+      table_id: deleteID.value,
+    });
+    if (success) {
+      successMessage("Successfully deleted table " + deleteID.value);
+      dialogVisible.value = false;
+      getAllTables();
+    } else {
+      errorMessage("Could not delete table " + data.error);
+    }
+  } catch (e) {
+    errorMessage("AJAX failed - " + getXHRError(e));
+  }
 };
 
 const copyShortcode = async (id) => {
