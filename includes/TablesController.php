@@ -213,6 +213,21 @@ class TablesController
     }
   }
 
+  public function updateTable($table_id, $table_name, $table_desc)
+  {
+    $this->getTable($table_id);
+
+    $table_attrs = [
+      'ID' => $table_id,
+      'post_title' => $table_name,
+      'post_content' => $table_desc
+    ];
+
+    $response = wp_update_post($table_attrs);
+
+    if ($response == 0) throw new Exception("Could not update table $table_id", 500);
+  }
+
   /* debug-start */
   /**
    * Drops the plugin database table - debug only

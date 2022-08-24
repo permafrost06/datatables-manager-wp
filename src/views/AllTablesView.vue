@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/es/components/message/style/css";
@@ -14,9 +14,14 @@ import CopyIcon from "../components/CopyIconComponent.vue";
 
 const tables = ref([]);
 const deleteID = ref("");
+const editID = ref("");
 const router = useRouter();
 const dialogVisible = ref(false);
+const editDialogVisible = ref(false);
 const loading = ref(true);
+const formEl = ref();
+
+const modifiedTable = ref({});
 
 const getAllTables = async () => {
   try {
@@ -49,7 +54,15 @@ const handleAddNewTable = () => {
 };
 
 const handleEdit = (id) => {
-  router.push({ name: "Edit Table", params: { id } });
+  editID.value = id;
+
+  const selectedTable = tables.value.filter((table) => table.id == id);
+  modifiedTable.value = {
+    table_name: selectedTable[0].table_name,
+    table_desc: selectedTable[0].table_desc,
+  };
+
+  editDialogVisible.value = true;
 };
 
 const handleDelete = (id) => {
@@ -74,6 +87,32 @@ const confirmDelete = async () => {
   }
 };
 
+const confirmEdit = async () => {
+  formEl.value.validate(async (valid) => {
+    if (valid) {
+      try {
+        const { success, data } = await postAJAX("update_table", {
+          table_id: editID.value,
+          ...modifiedTable.value,
+          // table_name: modifiedTable.value.table_name,
+          // table_desc: modifiedTable.value.table_desc,
+        });
+        if (success) {
+          successMessage("Successfully updated table " + editID.value);
+          editDialogVisible.value = false;
+          getAllTables();
+        } else {
+          errorMessage("Could not update table " + data.error);
+        }
+      } catch (e) {
+        errorMessage("AJAX failed - " + getXHRError(e));
+      }
+    } else {
+      errorMessage("Please fix the errors in the form");
+    }
+  });
+};
+
 const copyShortcode = async (id) => {
   const shortcode = `[custom-datatable id="${id}"]`;
   await navigator.clipboard.writeText(shortcode);
@@ -83,6 +122,23 @@ const copyShortcode = async (id) => {
     type: "success",
   });
 };
+
+const formRules = reactive({
+  table_name: [
+    {
+      required: true,
+      message: "Please enter a name for the table",
+      trigger: "blur",
+    },
+  ],
+  table_desc: [
+    {
+      required: true,
+      message: "Please enter a description for the table",
+      trigger: "blur",
+    },
+  ],
+});
 </script>
 
 <template>
@@ -157,13 +213,36 @@ const copyShortcode = async (id) => {
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
-      <span
-        >Are you sure you want to delete contact with ID {{ deleteID }}?</span
-      >
+      <span>
+        Are you sure you want to delete contact with ID {{ deleteID }}?
+      </span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">Cancel</el-button>
           <el-button type="danger" @click="confirmDelete"> Confirm </el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <el-dialog v-model="editDialogVisible" title="Tips" width="30%">
+      <el-form
+        @submit.prevent="handleEditTable"
+        :model="modifiedTable"
+        :rules="formRules"
+        label-width="auto"
+        label-position="left"
+        ref="formEl"
+      >
+        <el-form-item prop="table_name" label="Table Name">
+          <el-input v-model="modifiedTable.table_name" />
+        </el-form-item>
+        <el-form-item prop="table_desc" label="Table Description">
+          <el-input type="textarea" v-model="modifiedTable.table_desc" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="editDialogVisible = false">Cancel</el-button>
+          <el-button type="danger" @click="confirmEdit">Confirm</el-button>
         </span>
       </template>
     </el-dialog>
