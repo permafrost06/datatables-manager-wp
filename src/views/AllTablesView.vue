@@ -214,7 +214,7 @@ const formRules = reactive({
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
       <span>
-        Are you sure you want to delete contact with ID {{ deleteID }}?
+        Are you sure you want to delete table with ID {{ deleteID }}?
       </span>
       <template #footer>
         <span class="dialog-footer">
