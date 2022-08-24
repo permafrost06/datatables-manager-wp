@@ -76,7 +76,7 @@ const formRules = reactive({
     </el-form-item>
     <el-form-item prop="description" label="Description">
       <el-col :span="8">
-        <el-input v-model="newTable.description" />
+        <el-input type="textarea" rows="3" v-model="newTable.description" />
       </el-col>
     </el-form-item>
     <el-row v-for="(column, index) in newTable.columns" :key="index">
