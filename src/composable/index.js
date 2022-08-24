@@ -49,7 +49,10 @@ export const errorMessage = (message) => {
 
 export const getXHRError = (xhr) => {
   const res = JSON.parse(xhr.responseText);
-  const err_msg = res.data.message ? res.data.message : res.data.error;
-
-  return err_msg;
+  if (res.data) {
+    const err_msg = res.data.message ? res.data.message : res.data.error;
+    return err_msg;
+  } else {
+    return res;
+  }
 };
