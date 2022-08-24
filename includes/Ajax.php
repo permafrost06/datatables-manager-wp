@@ -112,18 +112,6 @@ class Ajax
     wp_send_json_success($tables);
   }
 
-  /**
-   * Handles the AJAX call for getting all contacts
-   */
-  public function handleGetAllContacts(): void
-  {
-    $this->checkReferer();
-
-    $contacts = $this->contacts_controller->getAllContacts();
-
-    wp_send_json_success(['contacts' => $contacts]);
-  }
-
   public function addTable(): void
   {
     $this->checkReferer();
