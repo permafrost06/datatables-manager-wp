@@ -123,3 +123,13 @@ DELETE FROM `wp_datatables_tablerows` WHERE `row_id` = 15;
 
 --@block
 SELECT COUNT(*) FROM `wp_datatables_tablerows` WHERE `table_id` = 3;
+
+--@block
+CREATE TABLE IF NOT EXISTS `wp_custom_datatable_rows` (
+  `row_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `table_id` int NOT NULL,
+  `row` MEDIUMTEXT NOT NULL
+);
+
+--@block
+DROP TABLE IF EXISTS `wp_custom_datatable_rows`;

@@ -27,6 +27,7 @@ const onSubmit = async () => {
       try {
         const { success } = await postAJAX("add_table", {
           table_name: newTable.value.table_name,
+          description: newTable.value.description,
           columns: JSON.stringify(newTable.value.columns),
         });
 
@@ -49,6 +50,13 @@ const formRules = reactive({
       trigger: "blur",
     },
   ],
+  description: [
+    {
+      required: true,
+      message: "Please enter a description for the table",
+      trigger: "blur",
+    },
+  ],
 });
 </script>
 
@@ -64,6 +72,11 @@ const formRules = reactive({
     <el-form-item prop="table_name" label="Table Name">
       <el-col :span="8">
         <el-input v-model="newTable.table_name" />
+      </el-col>
+    </el-form-item>
+    <el-form-item prop="description" label="Description">
+      <el-col :span="8">
+        <el-input v-model="newTable.description" />
       </el-col>
     </el-form-item>
     <el-row v-for="(column, index) in newTable.columns" :key="index">

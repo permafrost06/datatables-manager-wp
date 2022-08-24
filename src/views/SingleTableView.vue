@@ -81,7 +81,8 @@ const handleAddNewRow = async () => {
     <el-row justify="space-between">
       <el-col class="flex-align-center" :span="9">
         <h2 class="inline space-after">{{ table.table_name }}</h2>
-        <el-button v-if="!showAddNew" type="primary" @click="showAddNewForm">
+        <p class="inline space-after">{{ table.table_desc }}</p>
+        <el-button type="primary" @click="showAddNewForm">
           Add new row
         </el-button>
       </el-col>

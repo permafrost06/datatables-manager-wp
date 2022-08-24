@@ -35,6 +35,8 @@ final class DatatablesManager
   {
     $this->defineConstants();
 
+    add_action('init', [$this, 'registerCustomPostType']);
+
     add_action('plugins_loaded', [$this, 'initPlugin']);
 
     register_activation_hook(__FILE__, [$this, 'activate']);
@@ -65,6 +67,31 @@ final class DatatablesManager
     define('DATATABLES_MANAGER_PATH', __DIR__);
     define('DATATABLES_MANAGER_URL', plugins_url('', DATATABLES_MANAGER_FILE));
     define('DATATABLES_MANAGER_ASSETS', DATATABLES_MANAGER_URL . '/assets');
+  }
+
+  public function registerCustomPostType()
+  {
+    $args = [
+      'label'               => __('Custom Datatable', 'datatables-manager'),
+      'public'              => false,
+      'exclude_from_search' => true,
+      'show_ui'             => true,
+      'show_in_menu'        => false,
+      'capability_type'     => 'post',
+      'labels'              => [
+        'name'               => __('Custom Datatables', 'datatables-manager'),
+        'singular_name'      => __('Custom Datatable', 'datatables-manager'),
+        'menu_name'          => __('Custom Datatables', 'datatables-manager'),
+        'add_new'            => __('Add Table', 'datatables-manager'),
+        'add_new_item'       => __('Add New Table', 'datatables-manager'),
+        'edit'               => __('Edit', 'datatables-manager'),
+        'edit_item'          => __('Edit Table', 'datatables-manager'),
+        'new_item'           => __('New Table', 'datatables-manager'),
+        'view'               => __('View Table', 'datatables-manager'),
+        'view_item'          => __('View Table', 'datatables-manager'),
+      ],
+    ];
+    register_post_type('custom_datatable', $args);
   }
 
   /**

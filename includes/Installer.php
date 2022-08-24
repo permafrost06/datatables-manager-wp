@@ -38,27 +38,16 @@ class Installer
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
 
-    $meta_table_name = "{$wpdb->prefix}datatables_tables";
-    $data_table_name = "{$wpdb->prefix}datatables_tablerows";
+    $table_name = "{$wpdb->prefix}custom_datatable_rows";
 
     if (!function_exists('dbDelta')) {
       require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     }
 
-    $create_table_query = "CREATE TABLE IF NOT EXISTS `{$meta_table_name}` (
-              `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-              `table_name` varchar(32) NOT NULL,
-              `columns` MEDIUMTEXT NOT NULL
-            ) {$charset_collate};
-    ";
-
-    dbDelta($create_table_query);
-
-    $create_table_query = "CREATE TABLE IF NOT EXISTS `{$data_table_name}` (
+    $create_table_query = "CREATE TABLE IF NOT EXISTS `{$table_name}` (
               `row_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
               `table_id` int NOT NULL,
-              `row` MEDIUMTEXT NOT NULL,
-              FOREIGN KEY (table_id) REFERENCES {$meta_table_name}(id)
+              `row` MEDIUMTEXT NOT NULL
             ) {$charset_collate};
     ";
 

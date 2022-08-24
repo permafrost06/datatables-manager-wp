@@ -63,6 +63,7 @@ class Ajax
       'get_table_rows' => ['function' => [$this, 'sendTableRows']],
       'add_row' => ['function' => [$this, 'addRow']],
       'get_datatable_rows' => ['function' => [$this, 'sendDatatableRows']],
+      'delete_everything' => ['function' => [$this, 'deleteEverything']]
     ];
   }
 
@@ -125,9 +126,10 @@ class Ajax
     $this->checkReferer();
 
     $table_name = $this->request->input("table_name");
+    $description = $this->request->input("description", true, true);
     $columns = $this->request->input("columns");
 
-    $this->tables_controller->addTable($table_name, $columns);
+    $this->tables_controller->addTable($table_name, $description, $columns);
 
     wp_send_json_success();
   }
@@ -185,5 +187,12 @@ class Ajax
       'recordsFiltered' => $count,
       'data' => $rows
     ]);
+  }
+
+  public function deleteEverything()
+  {
+    $this->tables_controller->deleteEverything();
+
+    wp_send_json_success('everything deleted');
   }
 }

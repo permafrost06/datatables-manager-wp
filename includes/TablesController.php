@@ -19,15 +19,14 @@ class TablesController
   /**
    * @var string Name of the table data database table
    */
-  protected $data_table;
+  protected $table_name;
 
   public function __construct()
   {
     global $wpdb;
 
     $this->db = $wpdb;
-    $this->meta_table = $wpdb->prefix . 'datatables_tables';
-    $this->data_table = $wpdb->prefix . 'datatables_tablerows';
+    $this->table_name = $wpdb->prefix . 'custom_datatable_rows';
   }
 
   /**
@@ -64,58 +63,76 @@ class TablesController
    */
   public function getAllTables(): array
   {
-    $all_tables = $this->db->get_results("SELECT * FROM {$this->meta_table}", ARRAY_A);
+    $post_params = [
+      'post_type' => 'custom_datatable',
+      'post_status' => 'publish'
+    ];
 
-    if (is_null($all_tables)) {
-      throw new Exception("Could not get tables", 500);
+    $table_posts = get_posts($post_params);
+
+    $tables = [];
+
+    foreach ($table_posts as $table_post) {
+      $columns = get_post_meta($table_post->ID, '_datatable_table_columns', true);
+
+      $tables[] = [
+        'id' => $table_post->ID,
+        'table_name' => $table_post->post_title,
+        'table_desc' => $table_post->post_content,
+        'columns' => json_decode(stripslashes($columns))
+      ];
     }
 
-    foreach ($all_tables as &$table) {
-      error_log(print_r($table, 1));
-      $table['columns'] = json_decode(stripslashes($table['columns']));
-    }
+    // if (is_null($all_tables)) {
+    //   throw new Exception("Could not get tables", 500);
+    // }
 
-    return $all_tables;
+    // foreach ($all_tables as &$table) {
+    //   $table['columns'] = json_decode(stripslashes($table['columns']));
+    // }
+
+    return $tables;
   }
 
-  public function addTable($table_name, $columns): void
+  public function addTable($table_name, $description, $columns): void
   {
-    $response = $this->db->insert(
-      $this->meta_table,
-      array('table_name' => $table_name, 'columns' => $columns)
-    );
+    $table_attrs = [
+      'post_title' => $table_name,
+      'post_content' => $description,
+      'post_type' => 'custom_datatable',
+      'post_status' => 'publish'
+    ];
 
-    if (!$response) {
-      throw new Exception("Could not insert table", 500);
-    }
-  }
+    $table_id = wp_insert_post($table_attrs);
 
-  public function getTableName($table_id): string
-  {
-    $table_name = $this->db->get_var("SELECT table_name FROM {$this->meta_table} WHERE `id` = '$table_id'");
+    update_post_meta($table_id, '_datatable_table_columns', wp_slash($columns));
 
-    return $table_name;
+    // check if inserted correctly
+    // throw exception if needed
   }
 
   public function getTableColumns($table_id): array
   {
-    $columns_json = $this->db->get_var("SELECT columns FROM {$this->meta_table} WHERE `id` = '$table_id'");
+    $columns_json = get_post_meta($table_id, '_datatable_table_columns', true);
 
     return json_decode(stripslashes($columns_json));
   }
 
   public function getTable($table_id): array
   {
+    $table_post = get_post($table_id);
+
     return [
       'id' => $table_id,
-      'table_name' => $this->getTableName($table_id),
+      'table_name' => $table_post->post_title,
+      'table_desc' => $table_post->post_content,
       'columns' => $this->getTableColumns($table_id)
     ];
   }
 
   public function getTableRows($table_id)
   {
-    $results = $this->db->get_results("SELECT row_id, row FROM {$this->data_table} WHERE `table_id` = '$table_id'", ARRAY_A);
+    $results = $this->db->get_results("SELECT row_id, row FROM {$this->table_name} WHERE `table_id` = '$table_id'", ARRAY_A);
 
     if (is_null($results)) {
       throw new Exception("Could not get results", 500);
@@ -132,7 +149,7 @@ class TablesController
 
   public function getTableRowsCount($table_id)
   {
-    $count = (int) $this->db->get_var("SELECT COUNT(*) FROM {$this->data_table} WHERE `table_id` = '$table_id'");
+    $count = (int) $this->db->get_var("SELECT COUNT(*) FROM {$this->table_name} WHERE `table_id` = '$table_id'");
 
     if (is_null($count)) {
       throw new Exception("Could not get rows count", 500);
@@ -144,7 +161,7 @@ class TablesController
   public function addRow($table_id, $row): void
   {
     $response = $this->db->insert(
-      $this->data_table,
+      $this->table_name,
       array('table_id' => $table_id, 'row' => $row)
     );
 
@@ -156,7 +173,7 @@ class TablesController
   public function getDataTableRows($table_id, $start, $length)
   {
     $results = $this->db->get_results(
-      "SELECT row_id, row FROM {$this->data_table} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
+      "SELECT row_id, row FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
       ARRAY_A
     );
 
@@ -177,12 +194,17 @@ class TablesController
   /**
    * Drops the plugin database table - debug only
    */
-  public function dropTable(): void
+  public function deleteEverything(): void
   {
-    $response =  $this->db->query("DROP TABLE IF EXISTS {$this->meta_table}");
+    $tables = $this->getAllTables();
 
-    if (false == $response) {
-      throw new Exception("Could not drop table", 500);
+    foreach ($tables as $table) {
+      delete_post_meta($table['id'], '_datatable_table_columns');
+
+      $response = wp_delete_post($table['id'], true);
+      if (is_null($response) || !$response) {
+        throw new Exception("Could not delete post", 500);
+      }
     }
   }
   /* debug-end */
