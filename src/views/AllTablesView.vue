@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import "element-plus/es/components/message/style/css";
-import { getAJAX } from "../composable";
+import { errorMessage, getAJAX, getXHRError } from "../composable";
 import CopyIcon from "../components/CopyIconComponent.vue";
 
 const tables = ref([]);
@@ -19,10 +19,10 @@ const getAllTables = async () => {
       tables.value = data;
       loading.value = false;
     } else {
-      console.log("AJAX not successful", data);
+      errorMessage("AJAX not successful - " + data);
     }
   } catch (e) {
-    console.log("AJAX failed", e);
+    errorMessage("AJAX failed - " + getXHRError(e));
   }
 };
 

@@ -1,7 +1,13 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { getAJAX, postAJAX } from "../composable";
+import {
+  getAJAX,
+  postAJAX,
+  successMessage,
+  errorMessage,
+  getXHRError,
+} from "../composable";
 
 const table = ref({});
 const columns = ref([]);
@@ -19,9 +25,9 @@ const table_id = useRoute().params.id;
   try {
     const { success, data } = await getAJAX("get_table", { table_id });
     if (success) table.value = data;
-    else console.log("AJAX not successful", data);
+    else errorMessage("Failed to fetch tables - " + data.error);
   } catch (e) {
-    console.log("AJAX Failed", e);
+    errorMessage("AJAX Failed - " + getXHRError(e));
   }
 
   columns.value = table.value.columns;
@@ -32,9 +38,9 @@ const getRows = async () => {
     const { success, data } = await getAJAX("get_table_rows", { table_id });
     if (success) {
       tableRows.value = data;
-    } else console.log("AJAX not successful", data);
+    } else errorMessage("Failed to fetch rows - " + data.error);
   } catch (e) {
-    console.log("AJAX Failed", e);
+    errorMessage("AJAX Failed - " + getXHRError(e));
   }
 };
 
@@ -54,23 +60,21 @@ const handleAddNewRow = async () => {
       const row = JSON.stringify(newRow.value);
 
       try {
-        const { success } = await postAJAX("add_row", {
+        const { success, data } = await postAJAX("add_row", {
           table_id,
           row,
         });
         if (success) {
           hideAddNewForm();
           newRow.value = {};
-          console.log("successfully added row");
+          successMessage("Added new row");
           getRows();
-        } else console.log("couldn't add row");
+        } else errorMessage("Couldn't add row - " + data.error);
       } catch (e) {
-        console.log("AJAX failed", e);
+        errorMessage("AJAX failed - ", getXHRError(e));
       }
-
-      showAddNew.value = false;
     } else {
-      console.log("form not valid");
+      errorMessage("Please fix the errors in the form");
     }
   });
 };

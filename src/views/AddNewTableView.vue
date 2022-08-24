@@ -1,6 +1,14 @@
 <script setup>
 import { ref, reactive } from "vue";
-import { postAJAX } from "../composable";
+import { useRouter } from "vue-router";
+import {
+  errorMessage,
+  getXHRError,
+  postAJAX,
+  successMessage,
+} from "../composable";
+
+const router = useRouter();
 
 const newTable = ref({
   table_name: "",
@@ -25,19 +33,21 @@ const onSubmit = async () => {
   formEl.value.validate(async (valid) => {
     if (valid) {
       try {
-        const { success } = await postAJAX("add_table", {
+        const { success, data } = await postAJAX("add_table", {
           table_name: newTable.value.table_name,
           description: newTable.value.description,
           columns: JSON.stringify(newTable.value.columns),
         });
 
-        if (success) console.log("successfully added table");
-        else console.log("couldn't add table");
+        if (success) {
+          successMessage("successfully added table");
+          router.push({ name: "All Tables" });
+        } else errorMessage("Couldn't add table - " + data.error);
       } catch (e) {
-        console.log(e);
+        errorMessage("AJAX failed - " + getXHRError(e));
       }
     } else {
-      console.log("Form not valid");
+      errorMessage("Please fix the errors in the form");
     }
   });
 };

@@ -1,3 +1,5 @@
+import { ElMessage } from "element-plus";
+
 export const getAJAX = async (action, payload = {}) => {
   const prefix = "dtm";
   payload.action = `${prefix}_${action}`;
@@ -29,4 +31,25 @@ export const updateSetting = async (option, value) => {
   });
 
   return success;
+};
+
+export const successMessage = (message) => {
+  ElMessage({
+    message,
+    type: "success",
+  });
+};
+
+export const errorMessage = (message) => {
+  ElMessage({
+    message,
+    type: "error",
+  });
+};
+
+export const getXHRError = (xhr) => {
+  const res = JSON.parse(xhr.responseText);
+  const err_msg = res.data.message ? res.data.message : res.data.error;
+
+  return err_msg;
 };
