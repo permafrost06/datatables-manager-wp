@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <?php foreach ($data['columns'] as $column) : ?>
-        <th data-custom_datatable_column_value="<?php esc_attr_e($column->value) ?>"><?php esc_html_e($column->label) ?></th>
+        <th data-custom_datatable_column_value="<?php esc_attr_e($column->value); ?>"><?php esc_html_e($column->label); ?></th>
       <?php endforeach ?>
     </tr>
   </thead>
