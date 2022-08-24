@@ -73,23 +73,18 @@ class TablesController
     $tables = [];
 
     foreach ($table_posts as $table_post) {
-      $columns = get_post_meta($table_post->ID, '_datatable_table_columns', true);
+      $columns = $this->getTableColumns($table_post->ID);
+
+      if ($columns == false) throw new Exception("Invalid table id $table_post->ID provided", 500);
+      if ($columns == "") throw new Exception("Columns not set for table $table_post->ID", 500);
 
       $tables[] = [
         'id' => $table_post->ID,
         'table_name' => $table_post->post_title,
         'table_desc' => $table_post->post_content,
-        'columns' => json_decode(stripslashes($columns))
+        'columns' => $columns
       ];
     }
-
-    // if (is_null($all_tables)) {
-    //   throw new Exception("Could not get tables", 500);
-    // }
-
-    // foreach ($all_tables as &$table) {
-    //   $table['columns'] = json_decode(stripslashes($table['columns']));
-    // }
 
     return $tables;
   }
@@ -105,10 +100,11 @@ class TablesController
 
     $table_id = wp_insert_post($table_attrs);
 
-    update_post_meta($table_id, '_datatable_table_columns', wp_slash($columns));
+    $response = add_post_meta($table_id, '_datatable_table_columns', wp_slash($columns));
 
-    // check if inserted correctly
-    // throw exception if needed
+    if ($response == false) {
+      throw new Exception("Could not insert table", 500);
+    }
   }
 
   public function getTableColumns($table_id): array
@@ -122,6 +118,8 @@ class TablesController
   {
     $table_post = get_post($table_id);
 
+    if (is_null($table_post)) throw new Exception("Table with id $table_id does not exist", 404);
+
     return [
       'id' => $table_id,
       'table_name' => $table_post->post_title,
@@ -132,6 +130,8 @@ class TablesController
 
   public function getTableRows($table_id)
   {
+    $this->getTable($table_id);
+
     $results = $this->db->get_results("SELECT row_id, row FROM {$this->table_name} WHERE `table_id` = '$table_id'", ARRAY_A);
 
     if (is_null($results)) {
