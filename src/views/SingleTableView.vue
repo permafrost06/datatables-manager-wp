@@ -7,6 +7,8 @@ const table = ref({});
 const columns = ref([]);
 const tableRows = ref([]);
 
+const formEl = ref();
+
 const newRow = ref({});
 
 const showAddNew = ref(false);
@@ -26,15 +28,13 @@ const table_id = useRoute().params.id;
 })();
 
 const getRows = async () => {
-  {
-    try {
-      const { success, data } = await getAJAX("get_table_rows", { table_id });
-      if (success) {
-        tableRows.value = data;
-      } else console.log("AJAX not successful", data);
-    } catch (e) {
-      console.log("AJAX Failed", e);
-    }
+  try {
+    const { success, data } = await getAJAX("get_table_rows", { table_id });
+    if (success) {
+      tableRows.value = data;
+    } else console.log("AJAX not successful", data);
+  } catch (e) {
+    console.log("AJAX Failed", e);
   }
 };
 
@@ -49,22 +49,30 @@ const hideAddNewForm = () => {
 };
 
 const handleAddNewRow = async () => {
-  const row = JSON.stringify(newRow.value);
+  formEl.value.validate(async (valid) => {
+    if (valid) {
+      const row = JSON.stringify(newRow.value);
 
-  try {
-    const { success } = await postAJAX("add_row", {
-      table_id,
-      row,
-    });
-    if (success) {
-      hideAddNewForm();
-      newRow.value = {};
-      console.log("successfully added row");
-      getRows();
-    } else console.log("couldn't add row");
-  } catch (e) {
-    console.log("AJAX failed", e);
-  }
+      try {
+        const { success } = await postAJAX("add_row", {
+          table_id,
+          row,
+        });
+        if (success) {
+          hideAddNewForm();
+          newRow.value = {};
+          console.log("successfully added row");
+          getRows();
+        } else console.log("couldn't add row");
+      } catch (e) {
+        console.log("AJAX failed", e);
+      }
+
+      showAddNew.value = false;
+    } else {
+      console.log("form not valid");
+    }
+  });
 };
 </script>
 
@@ -86,24 +94,6 @@ const handleAddNewRow = async () => {
         :total="contacts.length"
       /> -->
     </el-row>
-    <el-row v-if="showAddNew">
-      <el-form
-        @submit.prevent="handleAddNewRow"
-        label-width="auto"
-        label-position="left"
-      >
-        <h3>Add new row</h3>
-        <el-row v-for="column in columns" :key="column.value">
-          <el-form-item :prop="column.value" :label="column.label">
-            <el-input v-model="newRow[column.value]" />
-          </el-form-item>
-        </el-row>
-        <el-form-item>
-          <el-button native-type="submit" type="primary">Add row</el-button>
-          <el-button @click="hideAddNewForm">Cancel</el-button>
-        </el-form-item>
-      </el-form>
-    </el-row>
     <el-row>
       <el-col>
         <el-table :data="tableRows" style="width: 100%">
@@ -116,6 +106,39 @@ const handleAddNewRow = async () => {
         </el-table>
       </el-col>
     </el-row>
+    <el-dialog v-model="showAddNew" title="Shipping address">
+      <el-form
+        @submit.prevent="handleAddNewRow"
+        :model="newRow"
+        label-width="auto"
+        label-position="left"
+        ref="formEl"
+      >
+        <el-form-item
+          v-for="column in columns"
+          :key="column.value"
+          :label="column.label"
+          :prop="column.value"
+          label-width="auto"
+          label-position="left"
+          :rules="{
+            required: true,
+            message: column.label + ' can not be empty',
+            trigger: 'blur',
+          }"
+        >
+          <el-input v-model="newRow[column.value]" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showAddNew = false">Cancel</el-button>
+          <el-button type="primary" @click="handleAddNewRow">
+            Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
