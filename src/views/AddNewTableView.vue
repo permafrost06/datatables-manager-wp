@@ -40,7 +40,7 @@ const onSubmit = async () => {
         });
 
         if (success) {
-          successMessage("successfully added table");
+          successMessage("Successfully added table");
           router.push({ name: "All Tables" });
         } else errorMessage("Couldn't add table - " + data.error);
       } catch (e) {
