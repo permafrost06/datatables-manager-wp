@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { getAJAX, postAJAX } from "../composable";
 
@@ -74,30 +74,43 @@ const handleAddNewRow = async () => {
     }
   });
 };
+
+const currentPage = ref(1);
+const pageSize = ref(10);
+
+const rowPage = computed(() => {
+  return tableRows.value.slice(
+    pageSize.value * (currentPage.value - 1),
+    pageSize.value * currentPage.value
+  );
+});
 </script>
 
 <template>
   <div>
-    <el-row justify="space-between">
-      <el-col class="flex-align-center" :span="9">
-        <h2 class="inline space-after">{{ table.table_name }}</h2>
-        <p class="inline space-after">{{ table.table_desc }}</p>
-        <el-button type="primary" @click="showAddNewForm">
-          Add new row
-        </el-button>
+    <el-row>
+      <el-col :span="9">
+        <el-row class="margin-sm">
+          <h2>Table name: {{ table.table_name }}</h2>
+        </el-row>
+        <el-row class="margin-sm">
+          <p>Description: {{ table.table_desc }}</p>
+        </el-row>
       </el-col>
-      <!-- <el-pagination
+    </el-row>
+    <el-row justify="end">
+      <el-pagination
         v-model:currentPage="currentPage"
         v-model:page-size="pageSize"
         :page-sizes="[10, 20, 30, 40]"
         background
         layout="sizes, total, prev, pager, next"
-        :total="contacts.length"
-      /> -->
+        :total="tableRows.length"
+      />
     </el-row>
     <el-row>
       <el-col>
-        <el-table :data="tableRows" style="width: 100%">
+        <el-table :data="rowPage" style="width: 100%">
           <el-table-column prop="row_id" label="ID" />
           <el-table-column
             v-for="column in columns"
@@ -107,7 +120,12 @@ const handleAddNewRow = async () => {
         </el-table>
       </el-col>
     </el-row>
-    <el-dialog v-model="showAddNew" title="Shipping address">
+    <el-row justify="end">
+      <el-button type="primary" @click="showAddNewForm">
+        Add new row
+      </el-button>
+    </el-row>
+    <el-dialog v-model="showAddNew" title="Add new row">
       <el-form
         @submit.prevent="handleAddNewRow"
         :model="newRow"
@@ -144,12 +162,8 @@ const handleAddNewRow = async () => {
 </template>
 
 <style lang="scss" scoped>
-.space-after {
-  margin-right: 1rem;
-}
-
-.inline {
-  display: inline-block;
+.margin-sm * {
+  margin: 8px 0;
 }
 
 .flex-align-center {
