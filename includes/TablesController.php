@@ -173,7 +173,7 @@ class TablesController
   public function getDataTableRows($table_id, $start, $length)
   {
     $results = $this->db->get_results(
-      "SELECT row_id, row FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
+      "SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
       ARRAY_A
     );
 
