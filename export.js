@@ -26,7 +26,7 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
-const output = fs.createWriteStream("dist/contacts-manager.zip");
+const output = fs.createWriteStream("dist/datatables-manager.zip");
 const archive = archiver("zip");
 
 output.on("close", function () {
