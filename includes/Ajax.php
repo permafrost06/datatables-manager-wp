@@ -66,7 +66,9 @@ class Ajax
       'delete_table' => ['function' => [$this, 'deleteTable']],
       'update_table' => ['function' => [$this, 'updateTable']],
       'delete_row' => ['function' => [$this, 'deleteRow']],
+      /* debug-start */
       'delete_everything' => ['function' => [$this, 'deleteEverything']]
+      /* debug-end */
     ];
   }
 
