@@ -132,7 +132,7 @@ class TablesController
   {
     $this->getTable($table_id);
 
-    $results = $this->db->get_results("SELECT row_id, row FROM {$this->table_name} WHERE `table_id` = '$table_id'", ARRAY_A);
+    $results = $this->db->get_results("SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id'", ARRAY_A);
 
     if (is_null($results)) {
       throw new Exception("Could not get results", 500);
