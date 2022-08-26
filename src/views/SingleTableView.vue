@@ -127,7 +127,10 @@ const confirmDelete = async () => {
         </el-row>
       </el-col>
     </el-row>
-    <el-row justify="end">
+    <el-row justify="space-between">
+      <el-button type="primary" @click="showAddNewForm">
+        Add new row
+      </el-button>
       <el-pagination
         v-model:currentPage="currentPage"
         v-model:page-size="pageSize"
@@ -158,12 +161,6 @@ const confirmDelete = async () => {
             </template>
           </el-table-column>
         </el-table>
-      </el-col>
-    </el-row>
-    <el-row justify="end">
-      <el-button type="primary" @click="showAddNewForm">
-        Add new row
-      </el-button>
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
