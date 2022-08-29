@@ -8,11 +8,13 @@ import {
   errorMessage,
   getXHRError,
 } from "../composable";
+import DialogForm from "../components/DialogFormComponent.vue";
 
 const table = ref({});
 const columns = ref([]);
 const tableRows = ref([]);
 
+const updateID = ref();
 const deleteID = ref();
 const dialogVisible = ref(false);
 
@@ -21,6 +23,7 @@ const formEl = ref();
 const newRow = ref({});
 
 const showAddNew = ref(false);
+const showUpdateForm = ref(false);
 
 const table_id = useRoute().params.id;
 
@@ -49,37 +52,42 @@ const getRows = async () => {
 
 await getRows();
 
-const showAddNewForm = () => {
-  showAddNew.value = true;
+const handleAddNewRow = async (data) => {
+  const row = JSON.stringify(data);
+
+  try {
+    const { success, data } = await postAJAX("add_row", {
+      table_id,
+      row,
+    });
+    if (success) {
+      showAddNew.value = false;
+      newRow.value = {};
+      successMessage("Added new row");
+      await getRows();
+    } else errorMessage("Couldn't add row - " + data.error);
+  } catch (e) {
+    errorMessage("Couldn't add row. AJAX failed - ", getXHRError(e));
+  }
 };
 
-const hideAddNewForm = () => {
-  showAddNew.value = false;
-};
+const handleUpdateRow = async (data) => {
+  const row = JSON.stringify(data);
 
-const handleAddNewRow = async () => {
-  formEl.value.validate(async (valid) => {
-    if (valid) {
-      const row = JSON.stringify(newRow.value);
-
-      try {
-        const { success, data } = await postAJAX("add_row", {
-          table_id,
-          row,
-        });
-        if (success) {
-          hideAddNewForm();
-          newRow.value = {};
-          successMessage("Added new row");
-          getRows();
-        } else errorMessage("Couldn't add row - " + data.error);
-      } catch (e) {
-        errorMessage("AJAX failed - ", getXHRError(e));
-      }
-    } else {
-      errorMessage("Please fix the errors in the form");
-    }
-  });
+  try {
+    const { success, data } = await postAJAX("update_row", {
+      row_id: updateID.value,
+      row,
+    });
+    if (success) {
+      showUpdateForm.value = false;
+      newRow.value = {};
+      successMessage("Updated row");
+      await getRows();
+    } else errorMessage("Couldn't update row - " + data.error);
+  } catch (e) {
+    errorMessage("Couldn't update row. AJAX failed - ", getXHRError(e));
+  }
 };
 
 const currentPage = ref(1);
@@ -95,6 +103,13 @@ const rowPage = computed(() => {
 const handleDelete = (id) => {
   deleteID.value = id;
   dialogVisible.value = true;
+};
+
+const handleUpdate = (row) => {
+  const { row_id, ...row_columns } = row;
+  updateID.value = row_id;
+  newRow.value = row_columns;
+  showUpdateForm.value = true;
 };
 
 const confirmDelete = async () => {
@@ -128,7 +143,7 @@ const confirmDelete = async () => {
       </el-col>
     </el-row>
     <el-row justify="space-between">
-      <el-button type="primary" @click="showAddNewForm">
+      <el-button type="primary" @click="showAddNew = true">
         Add new row
       </el-button>
       <el-pagination
@@ -141,26 +156,28 @@ const confirmDelete = async () => {
       />
     </el-row>
     <el-row>
-      <el-col>
-        <el-table :data="rowPage">
-          <el-table-column prop="row_id" label="ID" />
-          <el-table-column
-            v-for="column in columns"
-            :prop="column.value"
-            :label="column.label"
-          />
-          <el-table-column label="Operations" width="100">
-            <template #default="{ row }">
-              <el-button
-                size="small"
-                type="danger"
-                @click="handleDelete(row.row_id)"
-              >
-                Delete
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-table :data="rowPage">
+        <el-table-column prop="row_id" label="ID" width="40" />
+        <el-table-column
+          v-for="column in columns"
+          :prop="column.value"
+          :label="column.label"
+        />
+        <el-table-column label="Operations" width="140">
+          <template #default="{ row }">
+            <el-button size="small" @click="handleUpdate(row)">
+              Edit
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleDelete(row.row_id)"
+            >
+              Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
@@ -173,39 +190,23 @@ const confirmDelete = async () => {
       </template>
     </el-dialog>
 
-    <el-dialog v-model="showAddNew" title="Add new row">
-      <el-form
-        @submit.prevent="handleAddNewRow"
-        :model="newRow"
-        label-width="auto"
-        label-position="left"
-        ref="formEl"
-      >
-        <el-form-item
-          v-for="column in columns"
-          :key="column.value"
-          :label="column.label"
-          :prop="column.value"
-          label-width="auto"
-          label-position="left"
-          :rules="{
-            required: true,
-            message: column.label + ' can not be empty',
-            trigger: 'blur',
-          }"
-        >
-          <el-input v-model="newRow[column.value]" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="showAddNew = false">Cancel</el-button>
-          <el-button type="primary" @click="handleAddNewRow">
-            Confirm
-          </el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <DialogForm
+      :show-dialog="showAddNew"
+      dialog-title="Add new row"
+      :columns="columns"
+      :form-data="newRow"
+      @dialog-confirm="handleAddNewRow"
+      @dialog-cancel="showAddNew = false"
+    />
+
+    <DialogForm
+      :show-dialog="showUpdateForm"
+      dialog-title="Update row"
+      :columns="columns"
+      :form-data="newRow"
+      @dialog-confirm="handleUpdateRow"
+      @dialog-cancel="showUpdateForm = false"
+    />
   </div>
 </template>
 

@@ -237,6 +237,13 @@ class TablesController
     }
   }
 
+  public function updateRow($row_id, $row)
+  {
+    $response = $this->db->update($this->table_name, ['row' => $row], ['row_id' => $row_id]);
+
+    if (!$response) throw new Exception("Could not update row with id '$row_id'", 500);
+  }
+
   /* debug-start */
   /**
    * Drops the plugin database table - debug only

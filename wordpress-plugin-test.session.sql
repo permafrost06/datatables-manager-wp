@@ -133,3 +133,6 @@ CREATE TABLE IF NOT EXISTS `wp_custom_datatable_rows` (
 
 --@block
 DROP TABLE IF EXISTS `wp_custom_datatable_rows`;
+
+--@block
+DELETE FROM `wp_custom_datatable_rows` WHERE `row_id` = 17;

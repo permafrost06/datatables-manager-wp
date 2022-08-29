@@ -66,6 +66,7 @@ class Ajax
       'delete_table' => ['function' => [$this, 'deleteTable']],
       'update_table' => ['function' => [$this, 'updateTable']],
       'delete_row' => ['function' => [$this, 'deleteRow']],
+      'update_row' => ['function' => [$this, 'updateRow']],
       /* debug-start */
       'delete_everything' => ['function' => [$this, 'deleteEverything']]
       /* debug-end */
@@ -213,6 +214,18 @@ class Ajax
     $row_id = $this->request->input('row_id');
 
     $this->tables_controller->deleteRow($row_id);
+
+    wp_send_json_success();
+  }
+
+  public function updateRow(): void
+  {
+    $this->checkReferer();
+
+    $row_id = $this->request->input('row_id');
+    $row = $this->request->input('row');
+
+    $this->tables_controller->updateRow($row_id, $row);
 
     wp_send_json_success();
   }
