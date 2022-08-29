@@ -23,11 +23,10 @@ const excludedDirs = ["node_modules", ".git", ".vscode", "vendor"];
 
 const files = await readdirRecursive(".", excludedDirs);
 
-const stripDebug = async (file) => {
+const stripPattern = async (file, pattern) => {
   const fileContent = await readFile(file, "utf-8");
 
-  const regex = /$\s*\/\* debug-start \*\/.*?\/\* debug-end \*\//gms;
-  const newContent = fileContent.replace(regex, "");
+  const newContent = fileContent.replace(pattern, "");
 
   return newContent;
 };
@@ -38,7 +37,10 @@ for (const file of files) {
   const fileExt = file.split(".")[file.split(".").length - 1];
 
   if (fileTypes.indexOf(fileExt) >= 0) {
-    const strippedContent = await stripDebug(file);
+    const strippedContent = await stripPattern(
+      file,
+      /$\s*\/\* debug-start \*\/.*?\/\* debug-end \*\//gms
+    );
 
     await writeFile(file, strippedContent, "utf-8");
   }
