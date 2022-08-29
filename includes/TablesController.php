@@ -30,35 +30,6 @@ class TablesController
   }
 
   /**
-   * Checks the variables for validity.
-   * Throws exception on invalid.
-   */
-  public function checkValidity(string $name, string $email, string $phone, string $address): void
-  {
-    // if (empty($name)) {
-    //   throw new Exception('Name is empty', 400);
-    // }
-    // if (empty($email)) {
-    //   throw new Exception('Email is empty', 400);
-    // }
-    // if (empty($phone)) {
-    //   throw new Exception('Phone is empty', 400);
-    // }
-    // if (empty($address)) {
-    //   throw new Exception('Address is empty', 400);
-    // }
-    // if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    //   throw new Exception('Email is invalid', 400);
-    // }
-    // if (!preg_match('/^[-+ ()\d]+$/', $phone)) {
-    //   throw new Exception('Phone number is invalid', 400);
-    // }
-    // if (strlen($phone) < 5 || strlen($phone) > 20) {
-    //   throw new Exception('Phone number length must be between 5 and 20', 400);
-    // }
-  }
-
-  /**
    * Gets all tables from the database
    */
   public function getAllTables(): array
