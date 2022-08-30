@@ -27,7 +27,7 @@ class Assets
       'datatables-manager-custom-datatable' => [
         'src' => DATATABLES_MANAGER_ASSETS . '/js/custom-datatable.js',
         'version' => filemtime(DATATABLES_MANAGER_PATH . '/assets/js/custom-datatable.js'),
-        'deps' => ['jquery', 'datatables']
+        'deps' => ['jquery', 'datatables-manager-datatables']
       ]
     ];
   }
