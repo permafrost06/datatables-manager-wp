@@ -125,7 +125,7 @@ class Ajax
 
     $this->tables_controller->addTable($table_name, $description, $columns);
 
-    wp_send_json_success();
+    wp_send_json_success(['message' => "Successfully added table"]);
   }
 
   public function sendTable(): void
@@ -159,7 +159,7 @@ class Ajax
 
     $this->tables_controller->addRow($table_id, $row);
 
-    wp_send_json_success();
+    wp_send_json_success(['message' => 'Successfully added row']);
   }
 
   public function sendDatatableRows(): void
@@ -191,7 +191,7 @@ class Ajax
 
     $this->tables_controller->deleteTable($table_id);
 
-    wp_send_json_success();
+    wp_send_json_success(['message' => "Successfully deleted table '$table_id'"]);
   }
 
   public function updateTable(): void
@@ -204,7 +204,7 @@ class Ajax
 
     $this->tables_controller->updateTable($table_id, $table_name, $table_desc);
 
-    wp_send_json_success();
+    wp_send_json_success(['mesasge' => "Successfully updated table '$table_id'"]);
   }
 
   public function deleteRow(): void
@@ -215,7 +215,7 @@ class Ajax
 
     $this->tables_controller->deleteRow($row_id);
 
-    wp_send_json_success();
+    wp_send_json_success(['message' => "Successfully deleted row '$row_id'"]);
   }
 
   public function updateRow(): void
@@ -227,7 +227,7 @@ class Ajax
 
     $this->tables_controller->updateRow($row_id, $row);
 
-    wp_send_json_success();
+    wp_send_json_success(['message' => "Successfully updated row '$row_id'"]);
   }
 
   /* debug-start */
