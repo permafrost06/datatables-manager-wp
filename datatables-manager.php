@@ -48,7 +48,7 @@ final class DatatablesManager
    * Initializes a singleton instance of the plugin
    * or gets instance of plugin
    */
-  public static function init(): DatatablesManager
+  public static function init()
   {
     static $instance = false;
 
@@ -62,7 +62,7 @@ final class DatatablesManager
   /**
    * Define the required plugin constants
    */
-  public function defineConstants(): void
+  public function defineConstants()
   {
     define('DATATABLES_MANAGER_VERSION', self::version);
     define('DATATABLES_MANAGER_FILE', __FILE__);
@@ -99,7 +99,7 @@ final class DatatablesManager
   /**
    * Initialize the plugin
    */
-  public function initPlugin(): void
+  public function initPlugin()
   {
     new Datatables\Manager\Assets();
 
@@ -113,7 +113,7 @@ final class DatatablesManager
       new \Datatables\Manager\Frontend($tables_controller);
   }
 
-  public function activate(): void
+  public function activate()
   {
     $installer = new Datatables\Manager\Installer();
     $installer->run();
