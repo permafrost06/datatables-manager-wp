@@ -93,7 +93,7 @@ final class DatatablesManager
         'view_item'          => __('View Table', 'datatables-manager'),
       ],
     ];
-    register_post_type('custom_datatable', $args);
+    register_post_type('datatables-manager_custom-datatable', $args);
   }
 
   /**
