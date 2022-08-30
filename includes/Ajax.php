@@ -46,7 +46,7 @@ class Ajax
   /**
    * Handles exceptions that occur during AJAX calls
    */
-  public function exceptionHandler(Exception $error): void
+  public function exceptionHandler(Exception $error)
   {
     wp_send_json_error(['error' => $error->getMessage()], $error->getCode());
   }
@@ -78,7 +78,7 @@ class Ajax
    * 
    * @param string $referer
    */
-  public function checkReferer(string $referer = 'datatables_admin_app'): void
+  public function checkReferer(string $referer = 'datatables_admin_app')
   {
     if (!check_ajax_referer($referer, false, false)) {
       wp_send_json_error(['error' => 'Nonce check failed'], 401);
@@ -90,7 +90,7 @@ class Ajax
    * 
    * @param array $referers An array of referer strings
    */
-  public function checkRefererMultiple(array $referers = ['dtm-frontend-shortcode', 'datatables_admin_app']): void
+  public function checkRefererMultiple(array $referers = ['dtm-frontend-shortcode', 'datatables_admin_app'])
   {
     $verified = false;
 

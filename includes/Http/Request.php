@@ -24,7 +24,7 @@ class Request
    * @param bool    $sanitized  Whether to sanitize the variable. True by default.
    * @param bool    $textarea   Whether the field is a textarea. Fale by default.
    */
-  public function input($name, $sanitized = true, $textarea = false): string
+  public function input($name, $sanitized = true, $textarea = false)
   {
     if (key_exists($name, $_REQUEST)) {
       $var = $_REQUEST[$name];
@@ -45,7 +45,7 @@ class Request
    * 
    * @param string  $name       Name of the request variable
    */
-  public function inputBool($name): bool
+  public function inputBool($name)
   {
     return strtolower($this->input($name)) == 'true' ? true : false;
   }
@@ -67,7 +67,7 @@ class Request
    * @param array $bool_fields      Array with the names of boolean vars
    * @param bool  $sanitized        Whether to sanitize the fields. True by default.
    */
-  public function getObject($fields = [], $textarea_fields = [], $bool_fields = [], $sanitized = true): array
+  public function getObject($fields = [], $textarea_fields = [], $bool_fields = [], $sanitized = true)
   {
     $object = [];
 

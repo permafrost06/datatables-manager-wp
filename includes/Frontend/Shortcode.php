@@ -24,7 +24,7 @@ class Shortcode
    * @param string  $filename Name of the file in the "views" folder
    * @param mixed   $data     Any data the file may need
    */
-  public function loadFile(string $filename, $data = ""): string
+  public function loadFile(string $filename, $data = "")
   {
     ob_start();
     include __DIR__ . '/views/' . $filename;
@@ -34,7 +34,7 @@ class Shortcode
   /**
    * Shortcode handler function for shortcode 'custom-datatable'
    */
-  public function renderCustomDatatable($atts): string
+  public function renderCustomDatatable($atts)
   {
     $atts = array_change_key_case((array) $atts, CASE_LOWER);
 

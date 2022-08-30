@@ -57,7 +57,7 @@ class TablesController
     return $tables;
   }
 
-  public function addTable($table_name, $description, $columns): void
+  public function addTable($table_name, $description, $columns)
   {
     $table_attrs = [
       'post_title' => $table_name,
@@ -75,14 +75,14 @@ class TablesController
     }
   }
 
-  public function getTableColumns($table_id): array
+  public function getTableColumns($table_id)
   {
     $columns_json = get_post_meta($table_id, $this->columns_meta_key, true);
 
     return json_decode(stripslashes($columns_json));
   }
 
-  public function getTable($table_id): array
+  public function getTable($table_id)
   {
     $table_post = get_post($table_id);
 
@@ -126,7 +126,7 @@ class TablesController
     return $count;
   }
 
-  public function addRow($table_id, $row): void
+  public function addRow($table_id, $row)
   {
     $response = $this->db->insert(
       $this->table_name,
