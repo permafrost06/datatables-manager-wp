@@ -16,7 +16,7 @@ class TablesController
    */
   protected $table_name;
 
-  protected $columns_meta_key = "_datatables_manager_datatable_table_columns";
+  protected $columns_meta_key = "_datatables_manager_columns";
 
   public function __construct()
   {
