@@ -12,14 +12,11 @@ class TablesController
   protected $db;
 
   /**
-   * @var string Name of the table meta database table
-   */
-  protected $meta_table;
-
-  /**
    * @var string Name of the table data database table
    */
   protected $table_name;
+
+  protected $columns_meta_key = "_datatables_manager_datatable_table_columns";
 
   public function __construct()
   {
@@ -71,7 +68,7 @@ class TablesController
 
     $table_id = wp_insert_post($table_attrs);
 
-    $response = add_post_meta($table_id, '_datatable_table_columns', wp_slash($columns));
+    $response = add_post_meta($table_id, $this->columns_meta_key, wp_slash($columns));
 
     if ($response == false) {
       throw new Exception("Could not insert table", 500);
@@ -80,7 +77,7 @@ class TablesController
 
   public function getTableColumns($table_id): array
   {
-    $columns_json = get_post_meta($table_id, '_datatable_table_columns', true);
+    $columns_json = get_post_meta($table_id, $this->columns_meta_key, true);
 
     return json_decode(stripslashes($columns_json));
   }
@@ -175,7 +172,7 @@ class TablesController
       }
     }
 
-    delete_post_meta($table_id, '_database_table_columns');
+    delete_post_meta($table_id, $this->columns_meta_key);
 
     $response = wp_delete_post($table_id, true);
 
@@ -224,7 +221,7 @@ class TablesController
     $tables = $this->getAllTables();
 
     foreach ($tables as $table) {
-      delete_post_meta($table['id'], '_datatable_table_columns');
+      delete_post_meta($table['id'], $this->columns_meta_key);
 
       $response = wp_delete_post($table['id'], true);
       if (is_null($response) || !$response) {
