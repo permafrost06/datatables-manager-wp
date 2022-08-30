@@ -5,6 +5,8 @@
  * Plugin URI: https://github.com/permafrost06/datatables-manager-wp/
  * Description: A demonstration plugin that can be used to create and manage custom tables
  * Version: 1.0.0
+ * Requires at least: 7.0
+ * Requires PHP: 7.2
  * Author: permafrost06
  * Author URI: https://github.com/permafrost06/
  * License: GPL v2
