@@ -24,7 +24,7 @@ class Shortcode
    * @param string  $filename Name of the file in the "views" folder
    * @param mixed   $data     Any data the file may need
    */
-  public function loadFile(string $filename, $data = "")
+  public function loadFile($filename, $data = "")
   {
     ob_start();
     include __DIR__ . '/views/' . $filename;
