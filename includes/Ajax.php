@@ -54,7 +54,7 @@ class Ajax
   /**
    * Gets the actions and handlers for AJAX calls
    */
-  public function getActions(): array
+  public function getActions()
   {
     return [
       'get_all_tables' => ['function' => [$this, 'sendAllTables'], 'nopriv' => true],
@@ -106,7 +106,7 @@ class Ajax
   /**
    * Sends all tables with JSON response
    */
-  public function sendAllTables(): void
+  public function sendAllTables()
   {
     $this->checkRefererMultiple();
 
@@ -115,7 +115,7 @@ class Ajax
     wp_send_json_success($tables);
   }
 
-  public function addTable(): void
+  public function addTable()
   {
     $this->checkReferer();
 
@@ -128,7 +128,7 @@ class Ajax
     wp_send_json_success(['message' => "Successfully added table"]);
   }
 
-  public function sendTable(): void
+  public function sendTable()
   {
     $this->checkReferer();
 
@@ -139,7 +139,7 @@ class Ajax
     wp_send_json_success($table);
   }
 
-  public function sendTableRows(): void
+  public function sendTableRows()
   {
     $this->checkReferer();
 
@@ -150,7 +150,7 @@ class Ajax
     wp_send_json_success($rows);
   }
 
-  public function addRow(): void
+  public function addRow()
   {
     $this->checkReferer();
 
@@ -162,7 +162,7 @@ class Ajax
     wp_send_json_success(['message' => 'Successfully added row']);
   }
 
-  public function sendDatatableRows(): void
+  public function sendDatatableRows()
   {
     $this->checkReferer('dtm-frontend-shortcode');
 
@@ -183,7 +183,7 @@ class Ajax
     ]);
   }
 
-  public function deleteTable(): void
+  public function deleteTable()
   {
     $this->checkReferer();
 
@@ -194,7 +194,7 @@ class Ajax
     wp_send_json_success(['message' => "Successfully deleted table '$table_id'"]);
   }
 
-  public function updateTable(): void
+  public function updateTable()
   {
     $this->checkReferer();
 
@@ -207,7 +207,7 @@ class Ajax
     wp_send_json_success(['mesasge' => "Successfully updated table '$table_id'"]);
   }
 
-  public function deleteRow(): void
+  public function deleteRow()
   {
     $this->checkReferer();
 
@@ -218,7 +218,7 @@ class Ajax
     wp_send_json_success(['message' => "Successfully deleted row '$row_id'"]);
   }
 
-  public function updateRow(): void
+  public function updateRow()
   {
     $this->checkReferer();
 

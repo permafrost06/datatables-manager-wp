@@ -29,7 +29,7 @@ class TablesController
   /**
    * Gets all tables from the database
    */
-  public function getAllTables(): array
+  public function getAllTables()
   {
     $post_params = [
       'post_type' => 'custom_datatable',
@@ -216,7 +216,7 @@ class TablesController
   /**
    * Drops the plugin database table - debug only
    */
-  public function deleteEverything(): void
+  public function deleteEverything()
   {
     $tables = $this->getAllTables();
 

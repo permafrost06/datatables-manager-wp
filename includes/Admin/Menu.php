@@ -15,7 +15,7 @@ class Menu
   /**
    * Creates a menu for the plugin in the admin panel
    */
-  public function adminMenu(): void
+  public function adminMenu()
   {
     add_menu_page(
       __('Datatables Manager Settings', 'datatables-manager'),
@@ -39,7 +39,7 @@ class Menu
   /**
    * Creates an entrypoint for the Vue.js app
    */
-  public function vueAppEntrypoint(): void
+  public function vueAppEntrypoint()
   {
 ?>
     <div id="datatables_admin_app"></div>

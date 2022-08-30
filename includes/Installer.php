@@ -10,7 +10,7 @@ class Installer
   /**
    * Run the installer
    */
-  public function run(): void
+  public function run()
   {
     $this->addVersion();
     $this->createTables();
@@ -19,7 +19,7 @@ class Installer
   /**
    * Add the plugin version to option database
    */
-  public function addVersion(): void
+  public function addVersion()
   {
     $installed = get_option('datatables_manager_installed');
 
@@ -33,7 +33,7 @@ class Installer
   /**
    * Create the database table(s) used by the plugin
    */
-  public function createTables(): void
+  public function createTables()
   {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();

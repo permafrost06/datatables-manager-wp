@@ -12,7 +12,7 @@ class Request
   /**
    * Returns the method of request
    */
-  public function method(): string
+  public function method()
   {
     return $_SERVER['REQUEST_METHOD'];
   }

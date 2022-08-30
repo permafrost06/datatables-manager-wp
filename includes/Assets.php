@@ -16,7 +16,7 @@ class Assets
   /**
    * Get the javascript files for the plugin
    */
-  public function getScripts(): array
+  public function getScripts()
   {
     return [
       'datatables-manager-datatables' => [
@@ -35,7 +35,7 @@ class Assets
   /**
    * Get the admin javascript files for the plugin
    */
-  public function getAdminScripts(): array
+  public function getAdminScripts()
   {
     return [
       'datatables-manager-admin-vue-app' => [
@@ -52,7 +52,7 @@ class Assets
   /**
    * Get the stylesheets for the plugin
    */
-  public function getStyles(): array
+  public function getStyles()
   {
     return [
       'datatables-manager-style' => [
@@ -65,7 +65,7 @@ class Assets
   /**
    * Register the plugin assets
    */
-  public function registerAssets(): void
+  public function registerAssets()
   {
     $scripts = $this->getScripts();
 
@@ -97,7 +97,7 @@ class Assets
   /**
    * Register the plugin admin assets
    */
-  public function registerAdminAssets(): void
+  public function registerAdminAssets()
   {
     $scripts = $this->getAdminScripts();
 
