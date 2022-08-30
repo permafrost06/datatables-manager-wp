@@ -45,6 +45,6 @@ class Menu
     <div id="datatables_admin_app"></div>
 <?php
 
-    wp_enqueue_script('datatables-admin-vue-app');
+    wp_enqueue_script('datatables-manager-admin-vue-app');
   }
 }

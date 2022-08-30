@@ -38,9 +38,9 @@ class Shortcode
   {
     $atts = array_change_key_case((array) $atts, CASE_LOWER);
 
-    wp_enqueue_style('datatables-style');
-    wp_enqueue_script('datatables');
-    wp_enqueue_script('custom-datatable');
+    wp_enqueue_style('datatables-manager-style');
+    wp_enqueue_script('datatables-manager-datatables');
+    wp_enqueue_script('datatables-manager-custom-datatable');
 
     if (array_key_exists('id', $atts)) {
       $id = $atts['id'];

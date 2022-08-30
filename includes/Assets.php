@@ -19,12 +19,12 @@ class Assets
   public function getScripts(): array
   {
     return [
-      'datatables' => [
+      'datatables-manager-datatables' => [
         'src' => DATATABLES_MANAGER_ASSETS . '/js/datatables.js',
         'version' => filemtime(DATATABLES_MANAGER_PATH . '/assets/js/datatables.js'),
         'deps' => ['jquery']
       ],
-      'custom-datatable' => [
+      'datatables-manager-custom-datatable' => [
         'src' => DATATABLES_MANAGER_ASSETS . '/js/custom-datatable.js',
         'version' => filemtime(DATATABLES_MANAGER_PATH . '/assets/js/custom-datatable.js'),
         'deps' => ['jquery', 'datatables']
@@ -38,7 +38,7 @@ class Assets
   public function getAdminScripts(): array
   {
     return [
-      'datatables-admin-vue-app' => [
+      'datatables-manager-admin-vue-app' => [
         /* next-line-enables-hmr */
         'src' => 'http://localhost:8081/main.js',
         /* next-line-disables-hmr */
@@ -55,7 +55,7 @@ class Assets
   public function getStyles(): array
   {
     return [
-      'datatables-style' => [
+      'datatables-manager-style' => [
         'src' => DATATABLES_MANAGER_ASSETS . '/styles/datatables.css',
         'version' => filemtime(DATATABLES_MANAGER_PATH . '/assets/styles/datatables.css')
       ],
@@ -85,7 +85,7 @@ class Assets
     }
 
     wp_localize_script(
-      'custom-datatable',
+      'datatables-manager-custom-datatable',
       'customDatatableAjax',
       [
         'ajax_url' => admin_url('admin-ajax.php'),
@@ -109,7 +109,7 @@ class Assets
     }
 
     wp_localize_script(
-      'datatables-admin-vue-app',
+      'datatables-manager-admin-vue-app',
       'datatablesMgrAdmin',
       [
         'ajax_url' => admin_url('admin-ajax.php'),
