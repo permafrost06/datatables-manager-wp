@@ -162,7 +162,7 @@ const formRules = reactive({
     <el-row>
       <el-col>
         <el-table v-loading="loading" :data="tables" style="width: 100%">
-          <el-table-column prop="id" label="ID" width="40" />
+          <el-table-column prop="id" label="ID" width="50" />
           <el-table-column prop="table_name" label="Table Name" min-width="16">
             <template #default="{ row }">
               <router-link

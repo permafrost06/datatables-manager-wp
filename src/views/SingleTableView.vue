@@ -157,7 +157,7 @@ const confirmDelete = async () => {
     </el-row>
     <el-row>
       <el-table :data="rowPage">
-        <el-table-column prop="row_id" label="ID" width="40" />
+        <el-table-column prop="row_id" label="ID" width="50" />
         <el-table-column
           v-for="column in columns"
           :prop="column.value"
