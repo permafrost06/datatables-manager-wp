@@ -26,6 +26,8 @@ class Menu
       'dashicons-id-alt',
       25
     );
+
+    /* debug-start */
     add_submenu_page(
       'datatables-manager',
       __('Datatables Manager Settings', 'datatables-manager'),
@@ -34,6 +36,7 @@ class Menu
       'datatables-manager#/settings',
       [$this, 'vueAppEntrypoint']
     );
+    /* debug-end */
   }
 
   /**
