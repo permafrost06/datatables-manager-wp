@@ -140,7 +140,7 @@ class TablesController
     }
   }
 
-  public function getDataTableRows($table_id, $start, $length, $search)
+  public function getDataTableRows($table_id, $start, $length, $columns, $order, $search)
   {
     $results = $this->db->get_results(
       "SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
@@ -171,14 +171,23 @@ class TablesController
       }));
     }
 
-    // $rows = [];
+    $columns_data = array_map(function ($column) {
+      return $column['data'];
+    }, $columns);
 
-    // foreach ($results as $result) {
-    //   $row = json_decode(stripslashes($result['row']), true);
-    //   $row['row_id'] = $result['row_id'];
+    $order_by = $columns_data[$order[0]['column']];
+    $order_dir = $order[0]['dir'];
 
-    //   $rows[] = $row;
-    // }
+    usort($results, function ($a, $b) use ($order_by, $order_dir) {
+      $value_a = $a[$order_by];
+      $value_b = $b[$order_by];
+
+      if ($order_dir == 'asc') {
+        return strcmp($value_a, $value_b);
+      } else {
+        return strcmp($value_b, $value_a);
+      }
+    });
 
     return $results;
   }

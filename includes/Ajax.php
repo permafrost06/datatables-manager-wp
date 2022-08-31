@@ -171,8 +171,10 @@ class Ajax
     $start = $this->request->input('start');
     $length = $this->request->input('length');
     $search = $this->request->input('search', false);
+    $order = $this->request->input('order', false);
+    $columns = $this->request->input('columns', false);
 
-    $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length, $search);
+    $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length, $columns, $order, $search);
 
     $total_count = $this->tables_controller->getTableRowsCount($table_id);
 
