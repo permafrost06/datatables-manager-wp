@@ -1,16 +1,26 @@
 <script setup>
 import { ref } from "vue";
 
+const loading = ref(true);
+
 const heading = ref("Datatables Manager");
+
+const pendingHandler = () => {
+  loading.value = true;
+};
+
+const resolveHandler = () => {
+  loading.value = false;
+};
 </script>
 
 <template>
   <div v-loading.lock="loading">
     <el-header>
       <el-row>
-        <el-col
-          ><h1>{{ heading }}</h1></el-col
-        >
+        <el-col>
+          <h1>{{ heading }}</h1>
+        </el-col>
       </el-row>
     </el-header>
     <el-main class="dtm-admin-app-main">
