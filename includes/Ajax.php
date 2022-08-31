@@ -170,15 +170,16 @@ class Ajax
     $draw = $this->request->tryInput('draw', 0);
     $start = $this->request->input('start');
     $length = $this->request->input('length');
+    $search = $this->request->input('search', false);
 
-    $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length);
+    $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length, $search);
 
-    $count = $this->tables_controller->getTableRowsCount($table_id);
+    $total_count = $this->tables_controller->getTableRowsCount($table_id);
 
     wp_send_json([
       'draw' => $draw,
-      'recordsTotal' => $count,
-      'recordsFiltered' => $count,
+      'recordsTotal' => $total_count,
+      'recordsFiltered' => count($rows),
       'data' => $rows
     ]);
   }

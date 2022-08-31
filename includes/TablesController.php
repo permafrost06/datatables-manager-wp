@@ -140,7 +140,7 @@ class TablesController
     }
   }
 
-  public function getDataTableRows($table_id, $start, $length)
+  public function getDataTableRows($table_id, $start, $length, $search)
   {
     $results = $this->db->get_results(
       "SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
@@ -156,6 +156,29 @@ class TablesController
       $result = json_decode(stripslashes($result['row']), true);
       $result['row_id'] = $row_id;
     }
+
+    if (isset($search['value']) && $search['value'] != '') {
+      $results = array_values(array_filter($results, function ($result) use ($search) {
+        foreach ($result as $key => $value) {
+          if ($key != 'row_id') {
+            if (strpos(strtolower($value), strtolower($search['value'])) !== false) {
+              return true;
+            }
+          }
+        }
+
+        return false;
+      }));
+    }
+
+    // $rows = [];
+
+    // foreach ($results as $result) {
+    //   $row = json_decode(stripslashes($result['row']), true);
+    //   $row['row_id'] = $result['row_id'];
+
+    //   $rows[] = $row;
+    // }
 
     return $results;
   }

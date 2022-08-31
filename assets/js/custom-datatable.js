@@ -11,8 +11,6 @@ jQuery(document).ready(function () {
     });
 
     elem.DataTable({
-      ordering: false,
-      searching: false,
       processing: true,
       serverSide: true,
       ajax: {
