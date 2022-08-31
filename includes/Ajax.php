@@ -167,12 +167,15 @@ class Ajax
     $this->checkReferer('dtm-frontend-shortcode');
 
     $table_id = $this->request->input('table_id');
+
     $draw = $this->request->tryInput('draw', 0);
+
     $start = $this->request->input('start');
     $length = $this->request->input('length');
-    $search = $this->request->input('search', false);
-    $order = $this->request->input('order', false);
-    $columns = $this->request->input('columns', false);
+
+    $search = $this->request->getArray('search');
+    $order = $this->request->getArray('order');
+    $columns = $this->request->getArray('columns');
 
     $rows = $this->tables_controller->getDataTableRows($table_id, $start, $length, $columns, $order, $search);
 

@@ -59,6 +59,17 @@ class Request
     }
   }
 
+  public function getArray($name, $sanitized = true)
+  {
+    $arr = $this->input($name, false);
+
+    if ($sanitized) {
+      $arr = map_deep($arr, 'sanitize_text_field');
+    }
+
+    return $arr;
+  }
+
   /**
    * Returns an array with fields specified by the arguments
    * 
