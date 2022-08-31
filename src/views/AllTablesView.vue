@@ -37,7 +37,7 @@ const getAllTables = async () => {
   }
 };
 
-getAllTables();
+await getAllTables();
 
 const getLabelsList = (columns) => {
   const labels = [];
