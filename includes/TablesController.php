@@ -161,7 +161,7 @@ class TablesController
       $results = array_values(array_filter($results, function ($result) use ($search) {
         foreach ($result as $key => $value) {
           if ($key != 'row_id') {
-            if (strpos(strtolower($value), strtolower($search['value'])) !== false) {
+            if (strpos($value, $search['value']) !== false) {
               return true;
             }
           }
