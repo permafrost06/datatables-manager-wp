@@ -16,6 +16,8 @@ class TablesController
    */
   protected $table_name;
 
+  protected $custom_post_type = 'datatables_manager';
+
   protected $columns_meta_key = "_datatables_manager_columns";
 
   public function __construct()
@@ -32,7 +34,7 @@ class TablesController
   public function getAllTables()
   {
     $post_params = [
-      'post_type' => 'datatables_manager',
+      'post_type' => $this->custom_post_type,
       'post_status' => 'publish'
     ];
 
@@ -62,7 +64,7 @@ class TablesController
     $table_attrs = [
       'post_title' => $table_name,
       'post_content' => $description,
-      'post_type' => 'custom_datatable',
+      'post_type' => $this->custom_post_type,
       'post_status' => 'publish'
     ];
 
