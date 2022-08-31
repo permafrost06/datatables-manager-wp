@@ -32,7 +32,7 @@ class TablesController
   public function getAllTables()
   {
     $post_params = [
-      'post_type' => 'custom_datatable',
+      'post_type' => 'datatables_manager',
       'post_status' => 'publish'
     ];
 
