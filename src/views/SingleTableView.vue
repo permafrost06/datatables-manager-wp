@@ -132,7 +132,7 @@ const confirmDelete = async () => {
 
 <template>
   <div>
-    <el-row>
+    <el-row justify="space-between" align="bottom">
       <el-col :span="9">
         <el-row class="margin-sm">
           <h2>Table name: {{ table.table_name }}</h2>
@@ -141,19 +141,15 @@ const confirmDelete = async () => {
           <p>Description: {{ table.table_desc }}</p>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row justify="space-between">
-      <el-button type="primary" @click="showAddNew = true">
-        Add new row
-      </el-button>
-      <el-pagination
-        v-model:currentPage="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[10, 20, 30, 40]"
-        background
-        layout="sizes, total, prev, pager, next"
-        :total="tableRows.length"
-      />
+      <el-col :span="3">
+        <el-button
+          class="margin-bottom-sm"
+          type="primary"
+          @click="showAddNew = true"
+        >
+          Add new row
+        </el-button>
+      </el-col>
     </el-row>
     <el-row>
       <el-table :data="rowPage">
@@ -178,6 +174,16 @@ const confirmDelete = async () => {
           </template>
         </el-table-column>
       </el-table>
+    </el-row>
+    <el-row justify="end">
+      <el-pagination
+        v-model:currentPage="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30, 40]"
+        background
+        layout="sizes, total, prev, pager, next"
+        :total="tableRows.length"
+      />
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
@@ -222,5 +228,9 @@ const confirmDelete = async () => {
 
 .no-padding {
   padding: 0;
+}
+
+.margin-bottom-sm {
+  margin-bottom: 6px;
 }
 </style>
