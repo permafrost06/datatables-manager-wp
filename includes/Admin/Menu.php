@@ -23,7 +23,7 @@ class Menu
       'manage_options',
       'datatables-manager',
       [$this, 'vueAppEntrypoint'],
-      'dashicons-id-alt',
+      'dashicons-editor-table',
       25
     );
 
