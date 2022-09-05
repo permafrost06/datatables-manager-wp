@@ -63,8 +63,7 @@ const getLabelsList = (columns) => {
 };
 
 const handleAddNewTable = () => {
-  // router.push({ name: "Add New Table" });
-  console.log("handleAddNewTable");
+  router.push({ name: "Add New Table" });
 };
 
 const handleEdit = (id) => {
@@ -183,14 +182,14 @@ const formRules = reactive({
           <el-table-column prop="id" label="ID" width="50" />
           <el-table-column prop="table_name" label="Table Name" min-width="16">
             <template #default="{ row }">
-              <!-- <router-link
-                      :to="{
-                        name: 'Single Table View',
-                        params: { id: row.id },
-                      }"
-                    > -->
-              {{ row.table_name }}
-              <!-- </router-link> -->
+              <router-link
+                :to="{
+                  name: 'Single Table View',
+                  params: { id: row.id },
+                }"
+              >
+                {{ row.table_name }}
+              </router-link>
             </template>
           </el-table-column>
           <el-table-column
