@@ -1,20 +1,53 @@
 {
-  "name": "permafrost/datatables-manager",
-  "description": "Demo datatables manager plugin",
-  "type": "wordpress-plugin",
-  "license": "GPLv2",
-  "authors": [
-    {
-      "name": "permafrost06",
-      "email": "zahin06@gmail.com"
-    }
-  ],
-  "minimum-stability": "dev",
-  "require": {},
-  "autoload": {
-    "psr-4": {
-      "Datatables\\Manager\\": "includes/"
+    "name": "wpfluent/wpfluent",
+    "type": "project",
+    "description": "WPFluent - The best framework to build WordPress plugins.",
+    "keywords": [
+        "WordPress",
+        "framework",
+        "WPFluent"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sheikh Heera",
+            "email": "heera.sheikh77@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wpfluent/framework"
+        }
+    ],
+    "require": {
+        "wpfluent/framework": "^1.0"
     },
-    "files": []
-  }
+    "autoload": {
+        "psr-4": {
+            "DtManager\\App\\": "app/",
+            "DtManager\\Framework\\": "vendor/wpfluent/framework/src/WPFluent"
+        },
+        "classmap": [
+            "database/"
+        ],
+        "files": []
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        },
+        "wpfluent": {
+            "namespace": {
+                "current": "DtManager"
+            }
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "DtManager\\App\\ComposerScript::postUpdate"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
