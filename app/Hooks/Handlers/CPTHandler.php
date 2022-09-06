@@ -7,7 +7,7 @@ use DtManager\App\App;
 class CPTHandler
 {
   protected $customPostTypes = [
-    DTManager::class
+    DtManagerTable::class
   ];
 
   public function registerPostTypes()

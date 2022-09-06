@@ -2,7 +2,7 @@
 
 namespace DtManager\App\Hooks\Handlers;
 
-class DTManager
+class DtManagerTable
 {
   public function registerPostType()
   {
