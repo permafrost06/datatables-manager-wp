@@ -39,10 +39,8 @@ class TableController extends Controller
     return $tables;
   }
 
-  public function getTable(TableRequest $request)
+  public function getTable($table_id)
   {
-    $table_id = $request->get('table_id');
-
     $table_post = get_post($table_id);
 
     if (is_null($table_post)) throw new Exception("Table with id $table_id does not exist", 404);
@@ -100,10 +98,8 @@ class TableController extends Controller
     ];
   }
 
-  public function deleteTable(TableRequest $request)
+  public function deleteTable($table_id)
   {
-    $table_id = $request->get('table_id');
-
     $this->getTable($table_id);
 
     // $num_rows = $this->getTableRowsCount($table_id);
