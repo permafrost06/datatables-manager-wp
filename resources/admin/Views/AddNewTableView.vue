@@ -1,12 +1,12 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-// import {
-//   errorMessage,
-//   getXHRError,
-//   postAJAX,
-//   successMessage,
-// } from "../composable";
+import {
+  errorMessage,
+  getRestError,
+  successMessage,
+} from "../composables/utils";
+import * as rest from "../composables/rest";
 
 const router = useRouter();
 
@@ -30,27 +30,22 @@ const addCol = () => {
 };
 
 const onSubmit = async () => {
-  console.log("onSubmit");
   formEl.value.validate(async (valid) => {
     if (valid) {
-      // try {
-      //   const { success, data } = await postAJAX("add_table", {
-      //     table_name: newTable.value.table_name,
-      //     description: newTable.value.description,
-      //     columns: JSON.stringify(newTable.value.columns),
-      //   });
+      try {
+        await rest.POST("tables", {
+          table_name: newTable.value.table_name,
+          description: newTable.value.description,
+          columns: JSON.stringify(newTable.value.columns),
+        });
 
-      //   if (success) {
-      //     successMessage("Successfully added table");
-      //     router.push({ name: "All Tables" });
-      //   } else errorMessage("Couldn't add table - " + data.error);
-      // } catch (e) {
-      //   errorMessage("AJAX failed - " + getXHRError(e));
-      // }
-      console.log("form valid");
+        successMessage("Successfully added table");
+        router.push({ name: "All Tables" });
+      } catch (e) {
+        errorMessage("Couldn't add table " + getRestError(e));
+      }
     } else {
-      // errorMessage("Please fix the errors in the form");
-      console.log("form invalid");
+      errorMessage("Please fix the errors in the form");
     }
   });
 };
