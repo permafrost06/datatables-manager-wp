@@ -79,8 +79,11 @@ class TableController extends Controller
     ];
   }
 
-  public function updateTable($table_id, $table_name, $table_desc)
+  public function updateTable(TableRequest $request, $table_id)
   {
+    $table_name = $request->get('table_name');
+    $table_desc = $request->get('table_desc');
+
     $this->getTable($table_id);
 
     $table_attrs = [

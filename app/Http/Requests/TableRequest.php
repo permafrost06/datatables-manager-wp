@@ -12,9 +12,9 @@ class TableRequest extends RequestGuard
   public function rules()
   {
     return [
-      'table_name' => 'required',
-      'description' => 'required',
-      'columns' => 'required'
+      // 'table_name' => 'required',
+      // 'description' => 'required',
+      // 'columns' => 'required'
     ];
   }
 
@@ -26,17 +26,17 @@ class TableRequest extends RequestGuard
     return [];
   }
 
-  /**
-   * @return Array
-   */
-  public function sanitize()
-  {
-    $data = $this->all();
+  // /**
+  //  * @return Array
+  //  */
+  // public function sanitize()
+  // {
+  //   $data = $this->all();
 
-    $data['table_name'] = sanitize_text_field($data['table_name']);
-    $data['description'] = sanitize_text_field($data['description']);
-    $data['columns'] = sanitize_text_field($data['columns']);
+  //   $data['table_name'] = sanitize_text_field($data['table_name']);
+  //   $data['description'] = sanitize_text_field($data['description']);
+  //   $data['columns'] = sanitize_text_field($data['columns']);
 
-    return $data;
-  }
+  //   return $data;
+  // }
 }

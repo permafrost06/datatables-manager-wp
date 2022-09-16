@@ -2,29 +2,15 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-// import {
-//   errorMessage,
-//   getAJAX,
-//   getXHRError,
-//   postAJAX,
-//   successMessage,
-// } from "../composable";
+import {
+  errorMessage,
+  successMessage,
+  getRestError,
+} from "../composables/utils";
+import * as rest from "../composables/rest";
 import CopyIcon from "../Components/CopyIconComponent.vue";
 
-const tables = ref([
-  {
-    id: 101,
-    table_name: "Contacts",
-    table_desc: "A table for contacts",
-    columns: [
-      { label: "Name", value: "name" },
-      { label: "Email", value: "email" },
-      { label: "Phone", value: "phone" },
-      { label: "Address", value: "address" },
-    ],
-  },
-  ,
-]);
+const tables = ref([]);
 const deleteID = ref("");
 const editID = ref("");
 const router = useRouter();
@@ -36,18 +22,12 @@ const formEl = ref();
 const modifiedTable = ref({});
 
 const getAllTables = async () => {
-  // try {
-  //   const { success, data } = await getAJAX("get_all_tables");
-  //   if (success) {
-  //     tables.value = data;
-  //     loading.value = false;
-  //   } else {
-  //     errorMessage("AJAX not successful - " + data);
-  //   }
-  // } catch (e) {
-  //   errorMessage("AJAX failed - " + getXHRError(e));
-  // }
-  console.log("getAllTables");
+  try {
+    tables.value = await rest.GET("tables");
+    loading.value = false;
+  } catch (e) {
+    errorMessage("Error getting tables - " + getRestError(e));
+  }
 };
 
 getAllTables();
@@ -84,48 +64,32 @@ const handleDelete = (id) => {
 };
 
 const confirmDelete = async () => {
-  // try {
-  //   const { success, data } = await postAJAX("delete_table", {
-  //     table_id: deleteID.value,
-  //   });
-  //   if (success) {
-  //     successMessage("Successfully deleted table " + deleteID.value);
-  //     dialogVisible.value = false;
-  //     getAllTables();
-  //   } else {
-  //     errorMessage("Could not delete table " + data.error);
-  //   }
-  // } catch (e) {
-  //   errorMessage("AJAX failed - " + getXHRError(e));
-  // }
-  console.log("confirmDelete");
+  try {
+    await rest.DELETE(`tables/${deleteID.value}`);
+    successMessage("Successfully deleted table " + deleteID.value);
+    dialogVisible.value = false;
+    getAllTables();
+  } catch (e) {
+    errorMessage("Could not delete table - " + getRestError(e));
+  }
 };
 
 const confirmEdit = async () => {
-  console.log("confirmEdit");
   formEl.value.validate(async (valid) => {
     if (valid) {
-      // try {
-      //   const { success, data } = await postAJAX("update_table", {
-      //     table_id: editID.value,
-      //     ...modifiedTable.value,
-      //     // table_name: modifiedTable.value.table_name,
-      //     // table_desc: modifiedTable.value.table_desc,
-      //   });
-      //   if (success) {
-      //     successMessage("Successfully updated table " + editID.value);
-      //     editDialogVisible.value = false;
-      //     getAllTables();
-      //   } else {
-      //     errorMessage("Could not update table " + data.error);
-      //   }
-      // } catch (e) {
-      //   errorMessage("AJAX failed - " + getXHRError(e));
-      // }
-      console.log("form valid");
+      try {
+        await rest.PATCH(`tables/${editID.value}`, {
+          table_id: editID.value,
+          ...modifiedTable.value,
+        });
+        successMessage("Successfully updated table " + editID.value);
+        editDialogVisible.value = false;
+        getAllTables();
+      } catch (e) {
+        errorMessage("Could not update table - " + getRestError(e));
+      }
     } else {
-      // errorMessage("Please fix the errors in the form");
-      console.log("form invalid");
+      errorMessage("Please fix the errors in the form");
     }
   });
 };
@@ -245,7 +209,7 @@ const formRules = reactive({
     </el-dialog>
     <el-dialog v-model="editDialogVisible" title="Tips" width="30%">
       <el-form
-        @submit.prevent="handleEditTable"
+        @submit.prevent="confirmEdit"
         :model="modifiedTable"
         :rules="formRules"
         label-width="auto"
