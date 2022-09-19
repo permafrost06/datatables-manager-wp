@@ -1,13 +1,12 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
-// import {
-//   getAJAX,
-//   postAJAX,
-//   successMessage,
-//   errorMessage,
-//   getXHRError,
-// } from "../composable";
+import {
+  errorMessage,
+  getRestError,
+  successMessage,
+} from "../composables/utils";
+import * as rest from "../composables/rest";
 import DialogForm from "../components/DialogFormComponent.vue";
 
 const table = ref({});
@@ -28,28 +27,21 @@ const showUpdateForm = ref(false);
 const table_id = useRoute().params.id;
 
 (async () => {
-  // try {
-  //   const { success, data } = await getAJAX("get_table", { table_id });
-  //   if (success) table.value = data;
-  //   else errorMessage("Failed to fetch tables - " + data.error);
-  // } catch (e) {
-  //   errorMessage("AJAX Failed - " + getXHRError(e));
-  // }
+  try {
+    table.value = await rest.GET(`table/${table_id}`);
+  } catch (e) {
+    errorMessage("Could not get table - " + getRestError(e));
+  }
 
-  // columns.value = table.value.columns;
-  console.log("get_table");
+  columns.value = table.value.columns;
 })();
 
 const getRows = async () => {
-  // try {
-  //   const { success, data } = await getAJAX("get_table_rows", { table_id });
-  //   if (success) {
-  //     tableRows.value = data;
-  //   } else errorMessage("Failed to fetch rows - " + data.error);
-  // } catch (e) {
-  //   errorMessage("AJAX Failed - " + getXHRError(e));
-  // }
-  console.log("getRows");
+  try {
+    tableRows.value = await rest.GET(`tables/${table_id}/rows`);
+  } catch (e) {
+    errorMessage("Could not get rows - " + getRestError(e));
+  }
 };
 
 // await getRows();
@@ -58,41 +50,34 @@ getRows();
 const handleAddNewRow = async (data) => {
   const row = JSON.stringify(data);
 
-  // try {
-  //   const { success, data } = await postAJAX("add_row", {
-  //     table_id,
-  //     row,
-  //   });
-  //   if (success) {
-  //     showAddNew.value = false;
-  //     newRow.value = {};
-  //     successMessage("Added new row");
-  //     await getRows();
-  //   } else errorMessage("Couldn't add row - " + data.error);
-  // } catch (e) {
-  //   errorMessage("Couldn't add row. AJAX failed - ", getXHRError(e));
-  // }
-  console.log("handleAddNewRow");
+  try {
+    await rest.POST(`tables/${table_id}/rows`, {
+      row,
+    });
+
+    showAddNew.value = false;
+    newRow.value = {};
+    successMessage("Added new row");
+    await getRows();
+  } catch (e) {
+    errorMessage("Couldn't add row - ", getRestError(e));
+  }
 };
 
 const handleUpdateRow = async (data) => {
   const row = JSON.stringify(data);
 
-  // try {
-  //   const { success, data } = await postAJAX("update_row", {
-  //     row_id: updateID.value,
-  //     row,
-  //   });
-  //   if (success) {
-  //     showUpdateForm.value = false;
-  //     newRow.value = {};
-  //     successMessage("Updated row");
-  //     await getRows();
-  //   } else errorMessage("Couldn't update row - " + data.error);
-  // } catch (e) {
-  //   errorMessage("Couldn't update row. AJAX failed - ", getXHRError(e));
-  // }
-  console.log("handleUpdateRow");
+  try {
+    await rest.PATCH(`rows/${updateID.value}`, {
+      row,
+    });
+    showUpdateForm.value = false;
+    newRow.value = {};
+    successMessage("Updated row");
+    await getRows();
+  } catch (e) {
+    errorMessage("Couldn't update row. - ", getRestError(e));
+  }
 };
 
 const currentPage = ref(1);
@@ -119,20 +104,13 @@ const handleUpdate = (row) => {
 
 const confirmDelete = async () => {
   // try {
-  //   const { success, data } = await postAJAX("delete_row", {
-  //     row_id: deleteID.value,
-  //   });
-  //   if (success) {
-  //     successMessage("Successfully deleted row " + deleteID.value);
-  //     dialogVisible.value = false;
-  //     await getRows();
-  //   } else {
-  //     errorMessage("Could not delete row " + data.error);
-  //   }
+  await rest.DELETE(`rows/${deleteID.value}`);
+  successMessage("Successfully deleted row " + deleteID.value);
+  dialogVisible.value = false;
+  await getRows();
   // } catch (e) {
-  //   errorMessage("AJAX failed - " + getXHRError(e));
+  //   errorMessage("Could not delete row - " + getRestError(e));
   // }
-  console.log("confirmDelete");
 };
 </script>
 

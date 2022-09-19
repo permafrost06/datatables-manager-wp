@@ -3,6 +3,7 @@
 namespace DtManager\App\Http\Controllers;
 
 use DtManager\App\Http\Requests\TableRequest;
+use DtManager\App\Models\Row;
 use Exception;
 
 class TableController extends Controller
@@ -10,6 +11,32 @@ class TableController extends Controller
   protected $custom_post_type = 'DtManager_table';
 
   protected $columns_meta_key = '_DtManager_table_columns';
+
+  public function addTable(TableRequest $request)
+  {
+    $table_name = $request->get('table_name');
+    $description = $request->get('description');
+    $columns = $request->get('columns');
+
+    $table_attrs = [
+      'post_title' => $table_name,
+      'post_content' => $description,
+      'post_type' => $this->custom_post_type,
+      'post_status' => 'publish'
+    ];
+
+    $table_id = wp_insert_post($table_attrs);
+
+    $response = add_post_meta($table_id, $this->columns_meta_key, wp_slash($columns));
+
+    if ($response == false) {
+      throw new Exception("Could not insert table", 500);
+    }
+
+    return [
+      'message' => 'Table added successfully'
+    ];
+  }
 
   public function getAllTables()
   {
@@ -53,30 +80,11 @@ class TableController extends Controller
     ];
   }
 
-  public function addTable(TableRequest $request)
+  public function getTableColumns($table_id)
   {
-    $table_name = $request->get('table_name');
-    $description = $request->get('description');
-    $columns = $request->get('columns');
+    $columns_json = get_post_meta($table_id, $this->columns_meta_key, true);
 
-    $table_attrs = [
-      'post_title' => $table_name,
-      'post_content' => $description,
-      'post_type' => $this->custom_post_type,
-      'post_status' => 'publish'
-    ];
-
-    $table_id = wp_insert_post($table_attrs);
-
-    $response = add_post_meta($table_id, $this->columns_meta_key, wp_slash($columns));
-
-    if ($response == false) {
-      throw new Exception("Could not insert table", 500);
-    }
-
-    return [
-      'message' => 'Table added successfully'
-    ];
+    return json_decode(stripslashes($columns_json));
   }
 
   public function updateTable(TableRequest $request, $table_id)
@@ -105,15 +113,11 @@ class TableController extends Controller
   {
     $this->getTable($table_id);
 
-    // $num_rows = $this->getTableRowsCount($table_id);
+    $num_rows = Row::where('table_id', $table_id)->count();
 
-    // if ($num_rows) {
-    //   $response = $this->db->delete($this->table_name, array('table_id' => $table_id));
-
-    //   if ($response == false) {
-    //     throw new Exception("Could not delete table rows", 500);
-    //   }
-    // }
+    if ($num_rows) {
+      Row::where('table_id', $table_id)->delete();
+    }
 
     delete_post_meta($table_id, $this->columns_meta_key);
 
@@ -126,94 +130,5 @@ class TableController extends Controller
     return [
       'message' => "Table $table_id deleted successfully"
     ];
-  }
-
-  public function getTableColumns($table_id)
-  {
-    $columns_json = get_post_meta($table_id, $this->columns_meta_key, true);
-
-    return json_decode(stripslashes($columns_json));
-  }
-
-  public function getTableRows($table_id)
-  {
-    $this->getTable($table_id);
-
-    $results = $this->db->get_results("SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id'", ARRAY_A);
-
-    if (is_null($results)) {
-      throw new Exception("Could not get results", 500);
-    }
-
-    foreach ($results as &$result) {
-      $row_id = $result['row_id'];
-      $result = json_decode(stripslashes($result['row']), true);
-      $result['row_id'] = $row_id;
-    }
-
-    return $results;
-  }
-
-  public function getTableRowsCount($table_id)
-  {
-    $count = (int) $this->db->get_var("SELECT COUNT(*) FROM {$this->table_name} WHERE `table_id` = '$table_id'");
-
-    if (is_null($count)) {
-      throw new Exception("Could not get rows count", 500);
-    }
-
-    return $count;
-  }
-
-  public function addRow($table_id, $row)
-  {
-    $response = $this->db->insert(
-      $this->table_name,
-      array('table_id' => $table_id, 'row' => $row)
-    );
-
-    if (!$response) {
-      throw new Exception("Could not insert row", 500);
-    }
-  }
-
-  // public function getDataTableRows($table_id, $start, $length, $columns, $order, $search)
-  // {
-  //   $results = $this->db->get_results(
-  //     "SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
-  //     ARRAY_A
-  //   );
-
-  //   if (is_null($results)) {
-  //     throw new Exception("Could not get results", 500);
-  //   }
-
-  //   foreach ($results as &$result) {
-  //     $row_id = $result['row_id'];
-  //     $result = json_decode(stripslashes($result['row']), true);
-  //     $result['row_id'] = $row_id;
-  //   }
-
-  //   DTProcessing::filter($results, $search);
-
-  //   DTProcessing::order($results, $columns, $order);
-
-  //   return $results;
-  // }
-
-  public function deleteRow($row_id)
-  {
-    $response = $this->db->delete($this->table_name, ['row_id' => $row_id]);
-
-    if (!$response) {
-      throw new Exception("Could not delete row with id $row_id", 404);
-    }
-  }
-
-  public function updateRow($row_id, $row)
-  {
-    $response = $this->db->update($this->table_name, ['row' => $row], ['row_id' => $row_id]);
-
-    if (!$response) throw new Exception("Could not update row with id '$row_id'", 500);
   }
 }
