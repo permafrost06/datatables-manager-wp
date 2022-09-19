@@ -9,5 +9,5 @@ return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'DtManager\\Database\\DBMigrator' => $baseDir . '/database/DBMigrator.php',
     'DtManager\\Database\\DBSeeder' => $baseDir . '/database/DBSeeder.php',
-    'DtManager\\Database\\Migrations\\ExampleMigrator' => $baseDir . '/database/Migrations/ExampleMigrator.php',
+    'DtManager\\Database\\Migrations\\RowsTableMigrator' => $baseDir . '/database/Migrations/RowsTableMigrator.php',
 );

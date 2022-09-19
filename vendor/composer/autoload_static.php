@@ -37,7 +37,7 @@ class ComposerStaticInitba57ff0bff3d82b2818db39292c9552b
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DtManager\\Database\\DBMigrator' => __DIR__ . '/../..' . '/database/DBMigrator.php',
         'DtManager\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
-        'DtManager\\Database\\Migrations\\ExampleMigrator' => __DIR__ . '/../..' . '/database/Migrations/ExampleMigrator.php',
+        'DtManager\\Database\\Migrations\\RowsTableMigrator' => __DIR__ . '/../..' . '/database/Migrations/RowsTableMigrator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
