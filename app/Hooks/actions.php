@@ -9,6 +9,8 @@
  * equivalent to add_action('slug-foo', ['FooHandler', 'handleFoo']).
  */
 
+use DtManager\App\Hooks\Handlers\ShortcodeHandler;
+
 /**
  * @var $app WPFluent\Foundation\Application
  */
@@ -20,3 +22,7 @@ $app->addAction('admin_menu', 'AdminMenuHandler@add');
  */
 
 $app->addAction('init', 'CPTHandler@registerPostTypes');
+
+add_shortcode('dtmanager-table', function ($atts) {
+  return (new ShortcodeHandler())->render($atts);
+});
