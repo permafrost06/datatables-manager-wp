@@ -62,7 +62,7 @@ const components = [
   ElCol,
   ElTable,
   ElTableColumn,
-  // ElPagination,
+  ElPagination,
   // ElButtonGroup,
   ElButton,
   // ElIcon,
