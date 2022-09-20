@@ -16,9 +16,9 @@ jQuery(document).ready(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: customDatatableAjax.ajax_url,
+        url: dtmanagerDatatable.url,
         data: function (d) {
-          d.action = "dtm_get_datatable_rows";
+          d.action = "dtmanager_datatable";
           d._ajax_nonce = customDatatableAjax.nonce;
           d.table_id = table_id;
         },

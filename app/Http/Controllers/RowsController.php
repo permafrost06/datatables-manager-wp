@@ -63,28 +63,4 @@ class RowsController extends Controller
       'message' => "Row with id $row_id deleted successfully"
     ];
   }
-
-  // public function getDataTableRows($table_id, $start, $length, $columns, $order, $search)
-  // {
-  //   $results = $this->db->get_results(
-  //     "SELECT `row_id`, `row` FROM {$this->table_name} WHERE `table_id` = '$table_id' LIMIT {$start}, {$length}",
-  //     ARRAY_A
-  //   );
-
-  //   if (is_null($results)) {
-  //     throw new Exception("Could not get results", 500);
-  //   }
-
-  //   foreach ($results as &$result) {
-  //     $row_id = $result['row_id'];
-  //     $result = json_decode(stripslashes($result['row']), true);
-  //     $result['row_id'] = $row_id;
-  //   }
-
-  //   DTProcessing::filter($results, $search);
-
-  //   DTProcessing::order($results, $columns, $order);
-
-  //   return $results;
-  // }
 }

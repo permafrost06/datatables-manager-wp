@@ -15,3 +15,5 @@ $router->get('/tables/{table_id}/rows', 'RowsController@getTableRows');
 
 $router->patch('/rows/{row_id}', 'RowsController@updateRow');
 $router->delete('/rows/{row_id}', 'RowsController@deleteRow');
+
+$router->get('/datatable', 'DatatableController@getRows');

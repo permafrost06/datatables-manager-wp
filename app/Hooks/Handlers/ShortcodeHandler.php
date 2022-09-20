@@ -43,8 +43,6 @@ class ShortcodeHandler
       $assets . '/css/datatables.css'
     );
 
-    do_action($slug . '_loading_app');
-
     wp_enqueue_script(
       $slug . '_datatables',
       $assets . '/js/datatables.js',
@@ -61,33 +59,12 @@ class ShortcodeHandler
       true
     );
 
-    // $currentUser = get_user_by('ID', get_current_user_id());
+    $ns = $app->config->get('app.rest_namespace');
+    $ver = $app->config->get('app.rest_version');
 
-    // wp_localize_script($slug . '_admin_app_start', 'fluentFrameworkAdmin', [
-    //   'slug'  => $slug = $app->config->get('app.slug'),
-    //   'nonce' => wp_create_nonce($slug),
-    //   'rest'  => $this->getRestInfo($app),
-    //   'brand_logo' => $this->getMenuIcon(),
-    //   'asset_url' => $assets,
-    //   'me'          => [
-    //     'id'        => $currentUser->ID,
-    //     'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
-    //     'email'     => $currentUser->user_email
-    //   ],
-    // ]);
+    wp_localize_script($slug . '_custom_datatable', 'dtmanagerDatatable', [
+      'url' => rest_url($ns . '/' . $ver . '/datatable'),
+      'nonce' => wp_create_nonce('dtmanager-shortcode')
+    ]);
   }
-
-  // protected function getRestInfo($app)
-  // {
-  //   $ns = $app->config->get('app.rest_namespace');
-  //   $ver = $app->config->get('app.rest_version');
-
-  //   return [
-  //     'base_url'  => esc_url_raw(rest_url()),
-  //     'url'       => rest_url($ns . '/' . $ver),
-  //     'nonce'     => wp_create_nonce('wp_rest'),
-  //     'namespace' => $ns,
-  //     'version'   => $ver
-  //   ];
-  // }
 }
