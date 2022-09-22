@@ -13,5 +13,11 @@
       "username": "wp",
       "password": "1234"
     }
+  ],
+  "logViewer.watch": [
+    {
+      "title": "Wordpress debug log",
+      "pattern": "D:\\Software\\xampp\\htdocs\\wp-content\\debug.log"
+    }
   ]
 }
