@@ -50,6 +50,7 @@ import {
   ElMessage,
   ElMessageBox,
   ElNotification,
+  ElHeader,
 } from "element-plus";
 
 const app = createApp({});
@@ -99,7 +100,9 @@ const components = [
   // ElDropdownItem,
   // ElDatePicker,
   // ElTag,
-  // ElSelectV2
+  // ElSelectV2,
+  ElHeader,
+  ElMain,
 ];
 
 components.forEach((component) => {
