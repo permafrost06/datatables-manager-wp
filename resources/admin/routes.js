@@ -14,12 +14,12 @@ export default [
   {
     path: "/add-new-table",
     name: "Add New Table",
-    component: () => AddNewTableView,
+    component: AddNewTableView,
   },
   {
     path: "/tables/:id",
     name: "Single Table View",
-    component: () => SingleTableView,
+    component: SingleTableView,
     props: true,
   },
 ];
