@@ -73,7 +73,7 @@ const formRules = reactive({
     @submit.prevent="onSubmit"
     :rules="formRules"
     :model="newTable"
-    label-width="auto"
+    label-width="100px"
     label-position="left"
     ref="formEl"
   >
