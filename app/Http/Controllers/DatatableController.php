@@ -7,7 +7,7 @@ use DtManager\App\Models\Row;
 
 class DatatableController extends Controller
 {
-  public function getRows(TableRequest $request)
+  public function index(TableRequest $request)
   {
     $table_id = $request->get('table_id');
 

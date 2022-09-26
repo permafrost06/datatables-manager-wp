@@ -12,7 +12,7 @@ class TableController extends Controller
 
   protected $columns_meta_key = '_DtManager_table_columns';
 
-  public function addTable(TableRequest $request)
+  public function store(TableRequest $request)
   {
     $table_name = $request->get('table_name');
     $description = $request->get('description');
@@ -38,7 +38,7 @@ class TableController extends Controller
     ];
   }
 
-  public function getAllTables()
+  public function index()
   {
     $post_params = [
       'post_type' => $this->custom_post_type,
@@ -66,7 +66,7 @@ class TableController extends Controller
     return $tables;
   }
 
-  public function getTable($table_id)
+  public function show($table_id)
   {
     $table_post = get_post($table_id);
 
@@ -87,12 +87,12 @@ class TableController extends Controller
     return json_decode(stripslashes($columns_json));
   }
 
-  public function updateTable(TableRequest $request, $table_id)
+  public function update(TableRequest $request, $table_id)
   {
     $table_name = $request->get('table_name');
     $table_desc = $request->get('table_desc');
 
-    $this->getTable($table_id);
+    $this->show($table_id);
 
     $table_attrs = [
       'ID' => $table_id,
@@ -109,9 +109,9 @@ class TableController extends Controller
     ];
   }
 
-  public function deleteTable($table_id)
+  public function destroy($table_id)
   {
-    $this->getTable($table_id);
+    $this->show($table_id);
 
     $num_rows = Row::where('table_id', $table_id)->count();
 

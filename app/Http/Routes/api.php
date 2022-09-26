@@ -4,16 +4,16 @@
  * @var $router DtManager\App\Http\Router
  */
 
-$router->post('/tables', 'TableController@addTable');
-$router->get('/tables', 'TableController@getAllTables');
-$router->get('/table/{table_id}', 'TableController@getTable');
-$router->patch('/tables/{table_id}', 'TableController@updateTable');
-$router->delete('/tables/{table_id}', 'TableController@deleteTable');
+$router->post('/tables', 'TableController@store');
+$router->get('/tables', 'TableController@index');
+$router->get('/table/{table_id}', 'TableController@show');
+$router->patch('/tables/{table_id}', 'TableController@update');
+$router->delete('/tables/{table_id}', 'TableController@destroy');
 
-$router->post('/tables/{table_id}/rows', 'RowsController@addRow');
-$router->get('/tables/{table_id}/rows', 'RowsController@getTableRows');
+$router->post('/tables/{table_id}/rows', 'RowsController@store');
+$router->get('/tables/{table_id}/rows', 'RowsController@index');
 
-$router->patch('/rows/{row_id}', 'RowsController@updateRow');
-$router->delete('/rows/{row_id}', 'RowsController@deleteRow');
+$router->patch('/rows/{row_id}', 'RowsController@update');
+$router->delete('/rows/{row_id}', 'RowsController@destroy');
 
-$router->get('/datatable', 'DatatableController@getRows');
+$router->get('/datatable', 'DatatableController@index');
