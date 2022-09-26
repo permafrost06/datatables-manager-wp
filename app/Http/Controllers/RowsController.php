@@ -4,15 +4,19 @@ namespace DtManager\App\Http\Controllers;
 
 use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
+use DtManager\App\Services\Sanitizer;
 use Exception;
 
 class RowsController extends Controller
 {
   public function store(Request $request, $table_id)
   {
+    $data = $request->all();
+    $data = Sanitizer::sanitizeRow($data);
+
     $row = new Row;
     $row->table_id = $table_id;
-    $row->row = $request->get('row');
+    $row->row = $data['row'];
     $row->save();
 
     return $row;
@@ -46,8 +50,11 @@ class RowsController extends Controller
 
   public function update(Request $request, $row_id)
   {
+    $data = $request->all();
+    $data = Sanitizer::sanitizeRow($data);
+
     $row = Row::find($row_id);
-    $row->row = $request->get('row');
+    $row->row = $data['row'];
     $row->save();
 
     return [

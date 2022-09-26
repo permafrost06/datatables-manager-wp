@@ -4,17 +4,21 @@ namespace DtManager\App\Http\Controllers;
 
 use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
+use DtManager\App\Services\Sanitizer;
 
 class DatatableController extends Controller
 {
   public function index(Request $request)
   {
-    $table_id = $request->get('table_id');
+    $data = $request->all();
+    $data = Sanitizer::sanitizeDatatable($data);
 
-    $draw = $request->get('draw');
+    $table_id = $data['table_id'];
 
-    $start = $request->get('start');
-    $length = $request->get('length');
+    $draw = $data['draw'];
+
+    $start = $data['start'];
+    $length = $data['length'];
 
     $search = $request->get('search');
     $order = $request->get('order');

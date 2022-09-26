@@ -4,6 +4,7 @@ namespace DtManager\App\Http\Controllers;
 
 use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
+use DtManager\App\Services\Sanitizer;
 use Exception;
 
 class TableController extends Controller
@@ -14,9 +15,13 @@ class TableController extends Controller
 
   public function store(Request $request)
   {
-    $table_name = $request->get('table_name');
-    $description = $request->get('description');
-    $columns = $request->get('columns');
+    $data = $request->all();
+
+    $data = Sanitizer::sanitizeTable($data);
+
+    $table_name = $data['table_name'];
+    $description = $data['description'];
+    $columns = $data['columns'];
 
     $table_attrs = [
       'post_title' => $table_name,
@@ -89,8 +94,12 @@ class TableController extends Controller
 
   public function update(Request $request, $table_id)
   {
-    $table_name = $request->get('table_name');
-    $table_desc = $request->get('table_desc');
+    $data = $request->all();
+
+    $data = Sanitizer::sanitizeTable($data);
+
+    $table_name = $data['table_name'];
+    $table_desc = $data['description'];
 
     $this->show($table_id);
 
