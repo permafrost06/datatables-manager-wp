@@ -2,7 +2,7 @@
 
 namespace DtManager\App\Http\Controllers;
 
-use DtManager\App\Http\Requests\TableRequest;
+use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
 use Exception;
 
@@ -12,7 +12,7 @@ class TableController extends Controller
 
   protected $columns_meta_key = '_DtManager_table_columns';
 
-  public function store(TableRequest $request)
+  public function store(Request $request)
   {
     $table_name = $request->get('table_name');
     $description = $request->get('description');
@@ -87,7 +87,7 @@ class TableController extends Controller
     return json_decode(stripslashes($columns_json));
   }
 
-  public function update(TableRequest $request, $table_id)
+  public function update(Request $request, $table_id)
   {
     $table_name = $request->get('table_name');
     $table_desc = $request->get('table_desc');

@@ -2,13 +2,13 @@
 
 namespace DtManager\App\Http\Controllers;
 
-use DtManager\App\Http\Requests\TableRequest;
+use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
 use Exception;
 
 class RowsController extends Controller
 {
-  public function store(TableRequest $request, $table_id)
+  public function store(Request $request, $table_id)
   {
     $row = new Row;
     $row->table_id = $table_id;
@@ -44,7 +44,7 @@ class RowsController extends Controller
     return $count;
   }
 
-  public function update(TableRequest $request, $row_id)
+  public function update(Request $request, $row_id)
   {
     $row = Row::find($row_id);
     $row->row = $request->get('row');

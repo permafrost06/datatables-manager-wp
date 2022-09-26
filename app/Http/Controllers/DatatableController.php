@@ -2,12 +2,12 @@
 
 namespace DtManager\App\Http\Controllers;
 
-use DtManager\App\Http\Requests\TableRequest;
+use DtManager\Framework\Request\Request;
 use DtManager\App\Models\Row;
 
 class DatatableController extends Controller
 {
-  public function index(TableRequest $request)
+  public function index(Request $request)
   {
     $table_id = $request->get('table_id');
 
